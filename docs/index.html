@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Information Diffusion Models on Zachary's Karate Club</title>
+<meta name="description" content="Compare Independent Cascade and Linear Threshold information diffusion, animated over Zachary's Karate Club — the real 1977 social network famous for splitting into two rival factions." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">
+      <span class="dot-hi"></span><span class="dot-officer"></span>
+      infodiff-model · <span id="eyebrow-model">independent cascade</span>
+    </div>
+    <h1>How does a rumor<br /><em>move through a room</em>?</h1>
+    <p class="dek">
+      Compare two classic ways information can spread: a one-shot
+      <strong>Independent Cascade</strong> and a socially reinforced
+      <strong>Linear Threshold</strong> model, both running on
+      <strong>Zachary's Karate Club</strong>, a real 34-person social network
+      from 1977 that famously fractured into two rival factions after a
+      dispute between its instructor and its president. Pick where a piece
+      of information starts, then watch who hears it, and when.
+    </p>
+  </header>
+
+  <section class="controls" aria-label="Playback controls">
+    <div class="select-control">
+      <label for="model-select">Model</label>
+      <select id="model-select" aria-label="Diffusion model"></select>
+    </div>
+    <div class="select-control scenario-control">
+      <label for="scenario-select">Starting point</label>
+      <select id="scenario-select" aria-label="Seeding scenario"></select>
+    </div>
+    <div class="btn-group">
+      <button class="ctl" id="play-btn" type="button">Play</button>
+      <button class="ctl secondary" id="step-btn" type="button">Step</button>
+      <button class="ctl secondary" id="reset-btn" type="button">Reset</button>
+    </div>
+    <div class="speed">
+      <label for="speed-range">Speed</label>
+      <input type="range" id="speed-range" min="300" max="2200" step="100" value="1100" />
+    </div>
+  </section>
+
+  <main class="stage">
+    <div class="network-panel">
+      <svg id="network" viewBox="0 0 820 620" role="img" aria-label="Force-directed network graph of the karate club showing cascade activation"></svg>
+    </div>
+
+    <aside class="panel">
+      <div class="card">
+        <h2>Step</h2>
+        <div class="step-readout" aria-live="polite" aria-atomic="true">
+          <span class="big" id="step-num">0</span><span class="of" id="step-of">/ 0</span>
+        </div>
+        <div class="faction-split">
+          <div class="faction-row">
+            <span class="swatch hi"></span>
+            <span>Mr. Hi's circle</span>
+            <span class="bar-track"><span class="bar-fill hi" id="bar-hi" style="width:0%"></span></span>
+            <span class="count" id="count-hi">0/17</span>
+          </div>
+          <div class="faction-row">
+            <span class="swatch officer"></span>
+            <span>Officer's circle</span>
+            <span class="bar-track"><span class="bar-fill officer" id="bar-officer" style="width:0%"></span></span>
+            <span class="count" id="count-officer">0/17</span>
+          </div>
+        </div>
+        <p class="story-line" id="story-line"></p>
+      </div>
+
+      <div class="card">
+        <h2>Cumulative reach</h2>
+        <svg id="chart" viewBox="0 0 260 110"></svg>
+      </div>
+
+      <div class="card">
+        <h2>Legend</h2>
+        <div class="legend">
+          <div class="legend-item"><span class="legend-swatch ring-hi"></span> Ring: born into Mr. Hi's faction (1977 split)</div>
+          <div class="legend-item"><span class="legend-swatch ring-officer"></span> Ring: born into Officer's faction (1977 split)</div>
+          <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: reached by the cascade</div>
+          <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: not yet reached</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="about">
+    <div>
+      <h3 id="model-title">Independent Cascade</h3>
+      <p id="model-description"></p>
+      <p id="model-detail"></p>
+    </div>
+    <div>
+      <h3>The dataset</h3>
+      <p>
+        Wayne Zachary studied a university karate club for three years,
+        mapping friendships between its 34 members. Partway through, a
+        conflict between the instructor ("Mr. Hi") and the club president
+        ("Officer") split the group in two — and Zachary showed the split
+        was largely predictable from the friendship network alone. It has
+        since become one of the most-used toy networks in graph theory.
+      </p>
+      <p>
+        Here, that ground-truth split is repurposed as a lens on the
+        cascade: the faction rings let you see whether a rumor stays inside
+        one social circle or jumps the fracture line.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <span id="footer-model">independent cascade · p = 0.2 · 34 nodes, 78 edges</span>
+    <span><a href="https://github.com/isaiahcampusano/infodiff-model">source on GitHub</a></span>
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

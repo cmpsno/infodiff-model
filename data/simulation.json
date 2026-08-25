@@ -1,0 +1,898 @@
+{
+  "model": "multiple",
+  "models": {
+    "independent_cascade": {
+      "name": "Independent Cascade",
+      "short_name": "IC",
+      "parameter": "p = 0.2",
+      "description": "Each newly active person gets one independent chance to activate each inactive neighbor. Failed attempts are not retried."
+    },
+    "linear_threshold": {
+      "name": "Linear Threshold",
+      "short_name": "LT",
+      "parameter": "thresholds 0.1\u20130.5",
+      "description": "A person adopts once the share of their active neighbors meets their individual threshold, turning repeated social reinforcement into diffusion."
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": 0,
+        "faction": "Hi",
+        "degree": 16
+      },
+      {
+        "id": 1,
+        "faction": "Hi",
+        "degree": 9
+      },
+      {
+        "id": 2,
+        "faction": "Hi",
+        "degree": 10
+      },
+      {
+        "id": 3,
+        "faction": "Hi",
+        "degree": 6
+      },
+      {
+        "id": 4,
+        "faction": "Hi",
+        "degree": 3
+      },
+      {
+        "id": 5,
+        "faction": "Hi",
+        "degree": 4
+      },
+      {
+        "id": 6,
+        "faction": "Hi",
+        "degree": 4
+      },
+      {
+        "id": 7,
+        "faction": "Hi",
+        "degree": 4
+      },
+      {
+        "id": 8,
+        "faction": "Hi",
+        "degree": 5
+      },
+      {
+        "id": 9,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 10,
+        "faction": "Hi",
+        "degree": 3
+      },
+      {
+        "id": 11,
+        "faction": "Hi",
+        "degree": 1
+      },
+      {
+        "id": 12,
+        "faction": "Hi",
+        "degree": 2
+      },
+      {
+        "id": 13,
+        "faction": "Hi",
+        "degree": 5
+      },
+      {
+        "id": 14,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 15,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 16,
+        "faction": "Hi",
+        "degree": 2
+      },
+      {
+        "id": 17,
+        "faction": "Hi",
+        "degree": 2
+      },
+      {
+        "id": 18,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 19,
+        "faction": "Hi",
+        "degree": 3
+      },
+      {
+        "id": 20,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 21,
+        "faction": "Hi",
+        "degree": 2
+      },
+      {
+        "id": 22,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 23,
+        "faction": "Officer",
+        "degree": 5
+      },
+      {
+        "id": 24,
+        "faction": "Officer",
+        "degree": 3
+      },
+      {
+        "id": 25,
+        "faction": "Officer",
+        "degree": 3
+      },
+      {
+        "id": 26,
+        "faction": "Officer",
+        "degree": 2
+      },
+      {
+        "id": 27,
+        "faction": "Officer",
+        "degree": 4
+      },
+      {
+        "id": 28,
+        "faction": "Officer",
+        "degree": 3
+      },
+      {
+        "id": 29,
+        "faction": "Officer",
+        "degree": 4
+      },
+      {
+        "id": 30,
+        "faction": "Officer",
+        "degree": 4
+      },
+      {
+        "id": 31,
+        "faction": "Officer",
+        "degree": 6
+      },
+      {
+        "id": 32,
+        "faction": "Officer",
+        "degree": 12
+      },
+      {
+        "id": 33,
+        "faction": "Officer",
+        "degree": 17
+      }
+    ],
+    "links": [
+      {
+        "source": 0,
+        "target": 1
+      },
+      {
+        "source": 0,
+        "target": 2
+      },
+      {
+        "source": 0,
+        "target": 3
+      },
+      {
+        "source": 0,
+        "target": 4
+      },
+      {
+        "source": 0,
+        "target": 5
+      },
+      {
+        "source": 0,
+        "target": 6
+      },
+      {
+        "source": 0,
+        "target": 7
+      },
+      {
+        "source": 0,
+        "target": 8
+      },
+      {
+        "source": 0,
+        "target": 10
+      },
+      {
+        "source": 0,
+        "target": 11
+      },
+      {
+        "source": 0,
+        "target": 12
+      },
+      {
+        "source": 0,
+        "target": 13
+      },
+      {
+        "source": 0,
+        "target": 17
+      },
+      {
+        "source": 0,
+        "target": 19
+      },
+      {
+        "source": 0,
+        "target": 21
+      },
+      {
+        "source": 0,
+        "target": 31
+      },
+      {
+        "source": 1,
+        "target": 2
+      },
+      {
+        "source": 1,
+        "target": 3
+      },
+      {
+        "source": 1,
+        "target": 7
+      },
+      {
+        "source": 1,
+        "target": 13
+      },
+      {
+        "source": 1,
+        "target": 17
+      },
+      {
+        "source": 1,
+        "target": 19
+      },
+      {
+        "source": 1,
+        "target": 21
+      },
+      {
+        "source": 1,
+        "target": 30
+      },
+      {
+        "source": 2,
+        "target": 3
+      },
+      {
+        "source": 2,
+        "target": 7
+      },
+      {
+        "source": 2,
+        "target": 8
+      },
+      {
+        "source": 2,
+        "target": 9
+      },
+      {
+        "source": 2,
+        "target": 13
+      },
+      {
+        "source": 2,
+        "target": 27
+      },
+      {
+        "source": 2,
+        "target": 28
+      },
+      {
+        "source": 2,
+        "target": 32
+      },
+      {
+        "source": 3,
+        "target": 7
+      },
+      {
+        "source": 3,
+        "target": 12
+      },
+      {
+        "source": 3,
+        "target": 13
+      },
+      {
+        "source": 4,
+        "target": 6
+      },
+      {
+        "source": 4,
+        "target": 10
+      },
+      {
+        "source": 5,
+        "target": 6
+      },
+      {
+        "source": 5,
+        "target": 10
+      },
+      {
+        "source": 5,
+        "target": 16
+      },
+      {
+        "source": 6,
+        "target": 16
+      },
+      {
+        "source": 8,
+        "target": 30
+      },
+      {
+        "source": 8,
+        "target": 32
+      },
+      {
+        "source": 8,
+        "target": 33
+      },
+      {
+        "source": 9,
+        "target": 33
+      },
+      {
+        "source": 13,
+        "target": 33
+      },
+      {
+        "source": 14,
+        "target": 32
+      },
+      {
+        "source": 14,
+        "target": 33
+      },
+      {
+        "source": 15,
+        "target": 32
+      },
+      {
+        "source": 15,
+        "target": 33
+      },
+      {
+        "source": 18,
+        "target": 32
+      },
+      {
+        "source": 18,
+        "target": 33
+      },
+      {
+        "source": 19,
+        "target": 33
+      },
+      {
+        "source": 20,
+        "target": 32
+      },
+      {
+        "source": 20,
+        "target": 33
+      },
+      {
+        "source": 22,
+        "target": 32
+      },
+      {
+        "source": 22,
+        "target": 33
+      },
+      {
+        "source": 23,
+        "target": 25
+      },
+      {
+        "source": 23,
+        "target": 27
+      },
+      {
+        "source": 23,
+        "target": 29
+      },
+      {
+        "source": 23,
+        "target": 32
+      },
+      {
+        "source": 23,
+        "target": 33
+      },
+      {
+        "source": 24,
+        "target": 25
+      },
+      {
+        "source": 24,
+        "target": 27
+      },
+      {
+        "source": 24,
+        "target": 31
+      },
+      {
+        "source": 25,
+        "target": 31
+      },
+      {
+        "source": 26,
+        "target": 29
+      },
+      {
+        "source": 26,
+        "target": 33
+      },
+      {
+        "source": 27,
+        "target": 33
+      },
+      {
+        "source": 28,
+        "target": 31
+      },
+      {
+        "source": 28,
+        "target": 33
+      },
+      {
+        "source": 29,
+        "target": 32
+      },
+      {
+        "source": 29,
+        "target": 33
+      },
+      {
+        "source": 30,
+        "target": 32
+      },
+      {
+        "source": 30,
+        "target": 33
+      },
+      {
+        "source": 31,
+        "target": 32
+      },
+      {
+        "source": 31,
+        "target": 33
+      },
+      {
+        "source": 32,
+        "target": 33
+      }
+    ]
+  },
+  "scenarios": {
+    "hub": {
+      "model": "independent_cascade",
+      "name": "Start at the hub (Officer, node 33)",
+      "story": "The rumor starts with the single most-connected member of the club.",
+      "seeds": [
+        33
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 2
+      },
+      "steps": [
+        [
+          33
+        ],
+        [
+          13,
+          14,
+          28
+        ],
+        [
+          3,
+          32
+        ],
+        [
+          2,
+          15,
+          23
+        ],
+        [
+          25
+        ]
+      ],
+      "cumulative_reach": [
+        1,
+        4,
+        6,
+        9,
+        10
+      ],
+      "total_reached": 10,
+      "total_nodes": 34
+    },
+    "leader_hi": {
+      "model": "independent_cascade",
+      "name": "Start with the instructor (Mr. Hi, node 0)",
+      "story": "Same idea, seeded from the rival hub on the other side of the eventual split.",
+      "seeds": [
+        0
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 1
+      },
+      "steps": [
+        [
+          0
+        ],
+        [
+          1,
+          10,
+          11,
+          19
+        ],
+        [
+          13,
+          17
+        ],
+        [
+          2
+        ],
+        [
+          32
+        ],
+        [
+          18,
+          23
+        ]
+      ],
+      "cumulative_reach": [
+        1,
+        5,
+        7,
+        8,
+        9,
+        11
+      ],
+      "total_reached": 11,
+      "total_nodes": 34
+    },
+    "peripheral": {
+      "model": "independent_cascade",
+      "name": "Start at the edge (node 11, 1 connection)",
+      "story": "Seeded from the network's only degree-1 member \u2014 most cascades stall almost immediately.",
+      "seeds": [
+        11
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 14
+      },
+      "steps": [
+        [
+          11
+        ],
+        [
+          0
+        ],
+        [
+          17
+        ]
+      ],
+      "cumulative_reach": [
+        1,
+        2,
+        3
+      ],
+      "total_reached": 3,
+      "total_nodes": 34
+    },
+    "dual": {
+      "model": "independent_cascade",
+      "name": "Start in both factions at once (nodes 0 and 33)",
+      "story": "Both future factions hear the rumor independently on the same day.",
+      "seeds": [
+        0,
+        33
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 5
+      },
+      "steps": [
+        [
+          0,
+          33
+        ],
+        [
+          7,
+          13,
+          8,
+          19,
+          23,
+          27,
+          28
+        ],
+        [
+          29,
+          32,
+          2
+        ],
+        [
+          26,
+          3
+        ],
+        [
+          1
+        ],
+        [
+          21
+        ]
+      ],
+      "cumulative_reach": [
+        2,
+        9,
+        12,
+        14,
+        15,
+        16
+      ],
+      "total_reached": 16,
+      "total_nodes": 34
+    },
+    "lt_hub": {
+      "model": "linear_threshold",
+      "name": "Start at the hub (Officer, node 33)",
+      "story": "The rumor starts with the single most-connected member of the club.",
+      "seeds": [
+        33
+      ],
+      "parameters": {
+        "influence": "active_neighbor_fraction",
+        "threshold_range": [
+          0.1,
+          0.5
+        ],
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          33
+        ],
+        [
+          8,
+          9,
+          14,
+          15,
+          18,
+          20,
+          22,
+          26,
+          28,
+          29,
+          30
+        ],
+        [
+          2,
+          31,
+          32
+        ],
+        [
+          23,
+          25,
+          27
+        ],
+        [
+          24
+        ]
+      ],
+      "cumulative_reach": [
+        1,
+        12,
+        15,
+        18,
+        19
+      ],
+      "total_reached": 19,
+      "total_nodes": 34
+    },
+    "lt_leader_hi": {
+      "model": "linear_threshold",
+      "name": "Start with the instructor (Mr. Hi, node 0)",
+      "story": "Same idea, seeded from the rival hub on the other side of the eventual split.",
+      "seeds": [
+        0
+      ],
+      "parameters": {
+        "influence": "active_neighbor_fraction",
+        "threshold_range": [
+          0.1,
+          0.5
+        ],
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          0
+        ],
+        [
+          8,
+          11,
+          12,
+          17,
+          21
+        ],
+        [
+          1,
+          2,
+          30
+        ],
+        [
+          3,
+          7,
+          9,
+          13,
+          19,
+          28
+        ],
+        [
+          31,
+          33
+        ],
+        [
+          14,
+          15,
+          18,
+          20,
+          22,
+          25,
+          26,
+          27,
+          29,
+          32
+        ],
+        [
+          23,
+          24
+        ]
+      ],
+      "cumulative_reach": [
+        1,
+        6,
+        9,
+        15,
+        17,
+        27,
+        29
+      ],
+      "total_reached": 29,
+      "total_nodes": 34
+    },
+    "lt_peripheral": {
+      "model": "linear_threshold",
+      "name": "Start at the edge (node 11, 1 connection)",
+      "story": "Seeded from the network's only degree-1 member \u2014 most cascades stall almost immediately.",
+      "seeds": [
+        11
+      ],
+      "parameters": {
+        "influence": "active_neighbor_fraction",
+        "threshold_range": [
+          0.1,
+          0.5
+        ],
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          11
+        ]
+      ],
+      "cumulative_reach": [
+        1
+      ],
+      "total_reached": 1,
+      "total_nodes": 34
+    },
+    "lt_dual": {
+      "model": "linear_threshold",
+      "name": "Start in both factions at once (nodes 0 and 33)",
+      "story": "Both future factions hear the rumor independently on the same day.",
+      "seeds": [
+        0,
+        33
+      ],
+      "parameters": {
+        "influence": "active_neighbor_fraction",
+        "threshold_range": [
+          0.1,
+          0.5
+        ],
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          0,
+          33
+        ],
+        [
+          8,
+          9,
+          11,
+          12,
+          14,
+          15,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          26,
+          28,
+          29,
+          30,
+          31
+        ],
+        [
+          1,
+          2,
+          25,
+          32
+        ],
+        [
+          3,
+          7,
+          13,
+          23,
+          24,
+          27
+        ]
+      ],
+      "cumulative_reach": [
+        2,
+        19,
+        23,
+        29
+      ],
+      "total_reached": 29,
+      "total_nodes": 34
+    }
+  }
+}
