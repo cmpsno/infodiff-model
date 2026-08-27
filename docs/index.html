@@ -41,18 +41,27 @@
     </div>
     <div class="btn-group">
       <button class="ctl" id="play-btn" type="button">Play</button>
-      <button class="ctl secondary" id="step-btn" type="button">Step</button>
+      <button class="ctl secondary" id="back-btn" type="button" aria-label="Previous step">← Back</button>
+      <button class="ctl secondary" id="step-btn" type="button">Next →</button>
       <button class="ctl secondary" id="reset-btn" type="button">Reset</button>
+      <button class="ctl secondary" id="export-btn" type="button">Save PNG</button>
     </div>
     <div class="speed">
       <label for="speed-range">Speed</label>
       <input type="range" id="speed-range" min="300" max="2200" step="100" value="1100" />
     </div>
+    <label class="compare-control"><input id="compare-toggle" type="checkbox" checked /> Compare IC + LT</label>
+    <div class="timeline"><label for="timeline-range">Timeline</label><input id="timeline-range" type="range" min="0" max="1" value="0" /></div>
   </section>
 
   <main class="stage">
-    <div class="network-panel">
-      <svg id="network" viewBox="0 0 820 620" role="img" aria-label="Force-directed network graph of the karate club showing cascade activation"></svg>
+    <div class="viewport-grid">
+      <div class="network-panel"><h2 id="primary-label">Independent Cascade</h2>
+        <svg id="network" viewBox="0 0 820 620" role="img" aria-label="Primary diffusion network"></svg>
+      </div>
+      <div class="network-panel" id="comparison-panel"><h2 id="comparison-label">Linear Threshold</h2>
+        <svg id="comparison-network" viewBox="0 0 820 620" role="img" aria-label="Comparison diffusion network"></svg>
+      </div>
     </div>
 
     <aside class="panel">
@@ -89,6 +98,7 @@
           <div class="legend-item"><span class="legend-swatch ring-hi"></span> Ring: born into Mr. Hi's faction (1977 split)</div>
           <div class="legend-item"><span class="legend-swatch ring-officer"></span> Ring: born into Officer's faction (1977 split)</div>
           <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: reached by the cascade</div>
+          <div class="legend-item"><span class="activation-gradient"></span> Fill shade: activation time</div>
           <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: not yet reached</div>
         </div>
       </div>

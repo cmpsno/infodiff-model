@@ -34,9 +34,10 @@ implementation gives neighbors equal influence and samples reproducible
 thresholds from `0.1` to `0.5`. The same node thresholds are shared across
 all four LT scenarios, so changing the seed location is a fair comparison.
 
-The repo precomputes the same four starting conditions for both models
-(eight runs total), then lets you switch models and step or auto-play through
-each run to compare how far — and how evenly — the information spreads.
+The default dataset precomputes four starting conditions for both models. The
+site can show IC and LT side by side on a synchronized timeline, scrub in
+either direction, color nodes by activation time, expose LT thresholds, and
+export the current network frame as PNG.
 
 ## Repo structure
 
@@ -46,6 +47,10 @@ infodiff-model/
 │   ├── independent_cascade.py   # the diffusion model itself
 │   ├── linear_threshold.py      # social-reinforcement diffusion model
 │   ├── generate_simulation.py   # builds the graph, runs all scenarios, writes JSON
+│   ├── configuration.py         # validated experiment configuration
+│   ├── graph_io.py              # graph files and built-in generators
+│   ├── batch_simulate.py        # repeated runs and statistical CSV summaries
+│   ├── example_config.json      # example sweep configuration
 │   ├── test_models.py           # model and generated-data contract tests
 │   └── requirements.txt
 ├── data/
@@ -65,12 +70,41 @@ pip install -r requirements.txt
 python3 generate_simulation.py
 ```
 
-This is deterministic — every scenario is driven by a fixed
-`random.Random(seed)` — so re-running it reproduces the exact same output
-unless you change the model parameters or `SEEDING_SCENARIOS` in
-`generate_simulation.py`. Each generated scenario includes a `model` and
-`parameters` field; the front end uses those model identifiers to populate
-and filter its model/scenario selectors.
+This is deterministic: every scenario is driven by a fixed random seed.
+The default command preserves the original Karate Club experiment.
+
+Run a parameter sweep on a generated graph:
+
+```bash
+python3 generate_simulation.py \
+  --graph erdos_renyi:100,0.05 --model both --p 0.1 0.2 0.3 --seeds 0 1
+```
+
+Or use the supplied JSON configuration:
+
+```bash
+python3 generate_simulation.py --config example_config.json
+```
+
+Graph sources include `karate`, `erdos_renyi:n,p`,
+`barabasi_albert:n,m`, `watts_strogatz:n,k,p`, and local `.csv`,
+`.edgelist`, `.gml`, `.graphml`, or Pajek `.net` files. Arbitrary
+file node labels are normalized to stable integer IDs, with the source labels
+retained in generated data. Threshold distributions can be uniform, normal,
+or a custom node-to-threshold mapping.
+
+## Batch experiments
+
+Repeated IC runs produce raw results and a summary with mean, median,
+variance, and a 95% normal-approximation confidence interval:
+
+```bash
+python3 batch_simulate.py --graph karate --seeds 0 --p 0.1 0.2 0.3 \
+  --runs 100 --output-prefix results/karate
+```
+
+This writes `results/karate_runs.csv` and
+`results/karate_summary.csv`.
 
 ## Running the tests
 

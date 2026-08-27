@@ -3,3 +3,8 @@ __pycache__/
 .venv/
 venv/
 .DS_Store
+
+# Generated experiment outputs (checked-in demo data lives under data/ and docs/)
+*_runs.csv
+*_summary.csv
+simulation_sweep.json

@@ -7,7 +7,10 @@ import unittest
 
 import networkx as nx
 
+from batch_simulate import run_batch
+from configuration import SimulationConfig
 from generate_simulation import THRESHOLD_SEED, build_scenarios_payload
+from graph_io import load_graph
 from independent_cascade import independent_cascade
 from linear_threshold import linear_threshold
 
@@ -85,6 +88,25 @@ class GeneratedDataTests(unittest.TestCase):
                     scenario["cumulative_reach"][-1], scenario["total_reached"]
                 )
                 self.assertEqual(scenario["total_nodes"], graph.number_of_nodes())
+
+    def test_parameter_sweep_and_activation_times(self) -> None:
+        graph = nx.path_graph(5)
+        config = SimulationConfig(
+            models=["independent_cascade"],
+            probabilities=[0, 1],
+            seed_strategies=[{"key": "start", "name": "Start", "seeds": [0]}],
+        )
+        scenarios = build_scenarios_payload(graph, config)
+        self.assertEqual(len(scenarios), 2)
+        self.assertEqual(scenarios["start_p0"]["activation_times"], {"0": 0})
+        self.assertEqual(scenarios["start_p1"]["total_reached"], 5)
+
+    def test_graph_generator_and_batch_summary(self) -> None:
+        graph = load_graph("erdos_renyi:12,0.2", random_seed=7)
+        self.assertEqual(graph.number_of_nodes(), 12)
+        rows, summaries = run_batch(nx.path_graph(4), [0], [1.0], 3)
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(summaries[0]["mean"], 4)
 
 
 if __name__ == "__main__":

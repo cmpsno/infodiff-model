@@ -40,7 +40,7 @@ class ThresholdResult:
 
 
 def linear_threshold(
-    graph, seeds: list[int], thresholds: dict[int, float]
+    graph, seeds: list[int], thresholds: dict[int, float], weight: str | None = None
 ) -> ThresholdResult:
     """Run one synchronous Linear Threshold simulation on ``graph``.
 
@@ -81,11 +81,18 @@ def linear_threshold(
     while True:
         newly_active: list[int] = []
         for node in sorted(graph_nodes - active):
-            degree = graph.degree[node]
-            if degree == 0:
+            neighbors = list(graph.neighbors(node))
+            if not neighbors:
                 continue
-            active_neighbors = sum(neighbor in active for neighbor in graph.neighbors(node))
-            if active_neighbors / degree >= thresholds[node]:
+            if weight and any(weight in graph.edges[node, n] for n in neighbors):
+                total = sum(float(graph.edges[node, n].get(weight, 1.0)) for n in neighbors)
+                influence = sum(
+                    float(graph.edges[node, n].get(weight, 1.0))
+                    for n in neighbors if n in active
+                ) / total if total else 0
+            else:
+                influence = sum(neighbor in active for neighbor in neighbors) / len(neighbors)
+            if influence >= thresholds[node]:
                 newly_active.append(node)
 
         if not newly_active:

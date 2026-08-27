@@ -1,346 +1,131 @@
-/* Information Diffusion — playback engine for precomputed diffusion runs
- * on Zachary's Karate Club. All simulation is done ahead of
- * time in Python (model/generate_simulation.py); this file only renders
- * the network once and steps through the recorded activation frames. */
-
+/* Synchronized, frame-by-frame comparison of precomputed diffusion runs. */
 (async function () {
-  const NETWORK_W = 820;
-  const NETWORK_H = 620;
-  const FACTION_SIZE = 17; // both real-world factions happen to be 17/17
-
+  const W = 820, H = 620;
   const data = await d3.json("simulation.json");
-  const { graph, scenarios } = data;
-  const scenarioKeys = Object.keys(scenarios);
-  const modelDefinitions = data.models || {
-    [data.model]: {
-      name: data.model.replaceAll("_", " "),
-      short_name: data.model,
-      parameter: data.p === undefined ? "" : `p = ${data.p}`,
-      description: "A precomputed information-diffusion model.",
-    },
-  };
-  const modelKeys = Object.keys(modelDefinitions);
-
-  // ---- state ----------------------------------------------------------
-  let currentModel = modelKeys[0];
-  let currentKey =
-    scenarioKeys.find((key) => (scenarios[key].model || data.model) === currentModel) ||
-    scenarioKeys[0];
-  let stepIndex = 0; // 0 = seed step
-  let activeSet = new Set();
-  let playing = false;
-  let timer = null;
-  let crossedFractureAt = null;
-
-  // ---- DOM refs ---------------------------------------------------------
-  const el = {
-    modelSelect: document.getElementById("model-select"),
-    scenarioSelect: document.getElementById("scenario-select"),
-    play: document.getElementById("play-btn"),
-    step: document.getElementById("step-btn"),
-    reset: document.getElementById("reset-btn"),
-    speed: document.getElementById("speed-range"),
-    stepNum: document.getElementById("step-num"),
-    stepOf: document.getElementById("step-of"),
-    barHi: document.getElementById("bar-hi"),
-    barOfficer: document.getElementById("bar-officer"),
-    countHi: document.getElementById("count-hi"),
-    countOfficer: document.getElementById("count-officer"),
-    story: document.getElementById("story-line"),
-    eyebrowModel: document.getElementById("eyebrow-model"),
-    modelTitle: document.getElementById("model-title"),
-    modelDescription: document.getElementById("model-description"),
-    modelDetail: document.getElementById("model-detail"),
-    footerModel: document.getElementById("footer-model"),
-  };
-
-  function scenarioModel(key) {
-    return scenarios[key].model || data.model;
-  }
-
-  function setOptions(select, entries) {
-    select.replaceChildren(
-      ...entries.map(([value, label]) => new Option(label, value))
-    );
-  }
-
-  setOptions(
-    el.modelSelect,
-    modelKeys.map((key) => [key, modelDefinitions[key].name])
-  );
-
-  function refreshScenarioOptions() {
-    const matchingKeys = scenarioKeys.filter(
-      (key) => scenarioModel(key) === currentModel
-    );
-    setOptions(
-      el.scenarioSelect,
-      matchingKeys.map((key) => [key, scenarios[key].name])
-    );
-    return matchingKeys;
-  }
-
-  // ---- network layout (drawn once, reused across scenarios) -----------
-  const svg = d3.select("#network").attr("viewBox", `0 0 ${NETWORK_W} ${NETWORK_H}`);
-  const linkLayer = svg.append("g").attr("class", "links");
-  const nodeLayer = svg.append("g").attr("class", "nodes");
-
-  const nodesById = new Map(graph.nodes.map((n) => [n.id, { ...n }]));
-  const links = graph.links.map((l) => ({ source: l.source, target: l.target }));
-
-  const sim = d3
-    .forceSimulation(Array.from(nodesById.values()))
-    .force(
-      "link",
-      d3.forceLink(links).id((d) => d.id).distance(58).strength(0.5)
-    )
+  const { graph, scenarios, models } = data;
+  const keys = Object.keys(scenarios), modelKeys = Object.keys(models);
+  const el = Object.fromEntries([
+    "model-select","scenario-select","play-btn","back-btn","step-btn","reset-btn",
+    "export-btn","speed-range","compare-toggle","timeline-range","step-num","step-of",
+    "bar-hi","bar-officer","count-hi","count-officer","story-line","eyebrow-model",
+    "model-title","model-description","model-detail","footer-model","comparison-panel",
+    "primary-label","comparison-label"
+  ].map(id => [id, document.getElementById(id)]));
+  let model = modelKeys[0], key, step = 0, playing = false, timer;
+  const nodes = graph.nodes.map(n => ({...n}));
+  const layoutLinks = graph.links.map(l => ({...l}));
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(layoutLinks).id(d => d.id).distance(58).strength(.5))
     .force("charge", d3.forceManyBody().strength(-190))
-    .force("center", d3.forceCenter(NETWORK_W / 2, NETWORK_H / 2))
-    .force("collision", d3.forceCollide(20))
-    .stop();
+    .force("center", d3.forceCenter(W/2,H/2)).force("collision", d3.forceCollide(20)).stop();
+  for (let i=0;i<340;i++) simulation.tick();
+  const positions = new Map(nodes.map(n => [n.id,n]));
 
-  for (let i = 0; i < 340; i++) sim.tick(); // settle synchronously, no flash of motion
-
-  const linkSel = linkLayer
-    .selectAll("line")
-    .data(links)
-    .join("line")
-    .attr("class", "link")
-    .attr("x1", (d) => d.source.x)
-    .attr("y1", (d) => d.source.y)
-    .attr("x2", (d) => d.target.x)
-    .attr("y2", (d) => d.target.y);
-
-  const nodeSel = nodeLayer
-    .selectAll("g.node")
-    .data(Array.from(nodesById.values()))
-    .join("g")
-    .attr("class", "node")
-    .attr("transform", (d) => `translate(${d.x},${d.y})`);
-
-  nodeSel
-    .append("circle")
-    .attr("class", (d) => `ring faction-${d.faction === "Hi" ? "hi" : "officer"}`)
-    .attr("r", 12);
-
-  nodeSel.append("circle").attr("class", "fill").attr("r", 8);
-
-  nodeSel
-    .append("text")
-    .attr("dy", 22)
-    .text((d) => d.id);
-
-  // ---- mini cumulative-reach chart --------------------------------------
-  const CW = 260,
-    CH = 110,
-    CM = { top: 8, right: 10, bottom: 18, left: 24 };
-  const chartSvg = d3.select("#chart").attr("viewBox", `0 0 ${CW} ${CH}`);
-  const chartG = chartSvg.append("g");
-  const xScale = d3.scaleLinear().range([CM.left, CW - CM.right]);
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, graph.nodes.length])
-    .range([CH - CM.bottom, CM.top]);
-
-  const axisG = chartG.append("g").attr("class", "chart-axis");
-  const areaPath = chartG
-    .append("path")
-    .attr("fill", "var(--gold-soft)")
-    .attr("stroke", "none");
-  const linePath = chartG
-    .append("path")
-    .attr("fill", "none")
-    .attr("stroke", "var(--gold)")
-    .attr("stroke-width", 1.6);
-  const marker = chartG
-    .append("circle")
-    .attr("r", 3.2)
-    .attr("fill", "var(--ink)");
-
-  function renderChart(scenario) {
-    const series = scenario.cumulative_reach; // length = steps.length
-    xScale.domain([0, Math.max(1, series.length - 1)]);
-
-    const line = d3
-      .line()
-      .x((_, i) => xScale(i))
-      .y((v) => yScale(v));
-    const area = d3
-      .area()
-      .x((_, i) => xScale(i))
-      .y0(yScale(0))
-      .y1((v) => yScale(v));
-
-    linePath.attr("d", line(series));
-    areaPath.attr("d", area(series));
-
-    axisG.selectAll("*").remove();
-    axisG
-      .append("line")
-      .attr("x1", CM.left)
-      .attr("x2", CW - CM.right)
-      .attr("y1", CH - CM.bottom)
-      .attr("y2", CH - CM.bottom)
-      .attr("stroke", "var(--line)");
-    axisG
-      .append("text")
-      .attr("x", CM.left)
-      .attr("y", CH - 4)
-      .attr("font-family", "var(--font-mono)")
-      .attr("font-size", 9)
-      .attr("fill", "var(--muted)")
-      .text("step 0");
-    axisG
-      .append("text")
-      .attr("x", CW - CM.right)
-      .attr("y", CH - 4)
-      .attr("text-anchor", "end")
-      .attr("font-family", "var(--font-mono)")
-      .attr("font-size", 9)
-      .attr("fill", "var(--muted)")
-      .text(`step ${series.length - 1}`);
+  function matching(modelName) { return keys.filter(k => scenarios[k].model === modelName); }
+  function baseName(s) { return s.name; }
+  function pairedScenario() {
+    const other = modelKeys.find(m => m !== model);
+    return scenarios[matching(other).find(k => baseName(scenarios[k]) === baseName(scenarios[key]))] || null;
   }
-
-  function updateChartMarker(scenario) {
-    const series = scenario.cumulative_reach;
-    const v = series[stepIndex];
-    marker.attr("cx", xScale(stepIndex)).attr("cy", yScale(v));
+  function activeAt(s, at) {
+    return new Set(s.steps.slice(0, at+1).flat());
   }
-
-  // ---- playback core ----------------------------------------------------
-  function scenario() {
-    return scenarios[currentKey];
+  function activationTime(s, id) {
+    return s.activation_times?.[String(id)] ?? s.steps.findIndex(nodes => nodes.includes(id));
   }
-
-  function totalSteps() {
-    return scenario().steps.length - 1;
-  }
-
-  function recomputeActiveSet() {
-    activeSet = new Set();
-    for (let i = 0; i <= stepIndex; i++) {
-      scenario().steps[i].forEach((id) => activeSet.add(id));
+  function drawNetwork(selector, s, at) {
+    const svg = d3.select(selector); svg.selectAll("*").remove();
+    const active = activeAt(s, at), maxStep = Math.max(1, s.steps.length-1);
+    const color = d3.scaleSequential().domain([maxStep,0]).interpolator(d3.interpolateYlOrBr);
+    svg.append("g").selectAll("line").data(graph.links).join("line")
+      .attr("class","link").classed("pulsed",d => active.has(d.source) && active.has(d.target))
+      .attr("x1",d=>positions.get(d.source).x).attr("y1",d=>positions.get(d.source).y)
+      .attr("x2",d=>positions.get(d.target).x).attr("y2",d=>positions.get(d.target).y)
+      .attr("stroke-width",d=>1+Math.min(4,(d.weight||1)-1));
+    const groups = svg.append("g").selectAll("g").data(graph.nodes).join("g")
+      .attr("class","node").attr("transform",d=>`translate(${positions.get(d.id).x},${positions.get(d.id).y})`);
+    groups.append("circle").attr("class",d=>`ring faction-${d.faction==="Hi"?"hi":"officer"}`)
+      .classed("seed",d=>s.seeds.includes(d.id)).attr("r",12);
+    groups.append("circle").attr("class","fill").attr("r",8)
+      .style("fill",d=>active.has(d.id)?color(activationTime(s,d.id)):null)
+      .append("title").text(d => {
+        const threshold = s.thresholds?.[String(d.id)];
+        return `Node ${d.id} · activated step ${activationTime(s,d.id)}${threshold===undefined?"":` · threshold ${threshold.toFixed(2)}`}`;
+      });
+    groups.append("text").attr("dy",22).text(d=>d.id);
+    if (s.model==="linear_threshold" && s.thresholds) {
+      groups.append("text").attr("class","threshold-label").attr("dy",-17)
+        .text(d=>Number(s.thresholds[String(d.id)]).toFixed(2));
     }
   }
 
-  function render() {
-    const s = scenario();
-    recomputeActiveSet();
-
-    nodeSel.select("circle.fill").classed("active", (d) => activeSet.has(d.id));
-    nodeSel
-      .select("circle.ring")
-      .classed("seed", (d) => s.seeds.includes(d.id));
-
-    linkSel.classed(
-      "pulsed",
-      (d) => activeSet.has(d.source.id) && activeSet.has(d.target.id)
-    );
-
-    let hiCount = 0,
-      officerCount = 0;
-    activeSet.forEach((id) => {
-      if (nodesById.get(id).faction === "Hi") hiCount++;
-      else officerCount++;
+  const chartSvg=d3.select("#chart"), chartG=chartSvg.append("g");
+  function drawChart(primary, comparison) {
+    chartG.selectAll("*").remove();
+    const series=[primary, comparison].filter(Boolean), maxX=Math.max(...series.map(s=>s.cumulative_reach.length-1),1);
+    const x=d3.scaleLinear().domain([0,maxX]).range([24,250]), y=d3.scaleLinear().domain([0,graph.nodes.length]).range([92,8]);
+    chartG.append("line").attr("x1",24).attr("x2",250).attr("y1",92).attr("y2",92).attr("stroke","var(--line)");
+    series.forEach((s,i)=>chartG.append("path").datum(s.cumulative_reach).attr("fill","none")
+      .attr("stroke",i?"var(--officer)":"var(--gold)").attr("stroke-width",2)
+      .attr("d",d3.line().x((_,j)=>x(j)).y(v=>y(v))));
+    series.forEach((s,i)=>{
+      const at=Math.min(step,s.cumulative_reach.length-1);
+      chartG.append("circle").attr("r",3.5).attr("fill",i?"var(--officer)":"var(--gold)")
+        .attr("cx",x(at)).attr("cy",y(s.cumulative_reach[at]));
     });
-
-    el.stepNum.textContent = stepIndex;
-    el.stepOf.textContent = `/ ${totalSteps()}`;
-    el.barHi.style.width = `${(hiCount / FACTION_SIZE) * 100}%`;
-    el.barOfficer.style.width = `${(officerCount / FACTION_SIZE) * 100}%`;
-    el.countHi.textContent = `${hiCount}/${FACTION_SIZE}`;
-    el.countOfficer.textContent = `${officerCount}/${FACTION_SIZE}`;
-
-    if (crossedFractureAt === null && hiCount > 0 && officerCount > 0) {
-      crossedFractureAt = stepIndex;
+  }
+  function totalSteps() {
+    const other=el["compare-toggle"].checked?pairedScenario():null;
+    return Math.max(scenarios[key].steps.length-1, other?.steps.length-1||0);
+  }
+  function render() {
+    const primary=scenarios[key], other=el["compare-toggle"].checked?pairedScenario():null;
+    drawNetwork("#network",primary,Math.min(step,primary.steps.length-1));
+    el["primary-label"].textContent=models[primary.model].name;
+    el["comparison-panel"].hidden=!other;
+    if(other){ drawNetwork("#comparison-network",other,Math.min(step,other.steps.length-1)); el["comparison-label"].textContent=models[other.model].name; }
+    drawChart(primary,other);
+    const active=activeAt(primary,Math.min(step,primary.steps.length-1));
+    const factions=d3.rollup(graph.nodes,v=>v.length,d=>d.faction);
+    for(const [faction,prefix] of [["Hi","hi"],["Officer","officer"]]){
+      const count=graph.nodes.filter(n=>n.faction===faction&&active.has(n.id)).length, total=factions.get(faction)||graph.nodes.length;
+      el[`bar-${prefix}`].style.width=`${100*count/total}%`; el[`count-${prefix}`].textContent=`${count}/${total}`;
     }
-    el.story.textContent =
-      crossedFractureAt !== null && crossedFractureAt <= stepIndex
-        ? `${s.story} It reached both factions by step ${crossedFractureAt}.`
-        : s.story;
-
-    updateChartMarker(s);
-    el.play.textContent = playing ? "Pause" : "Play";
-    el.step.disabled = stepIndex >= totalSteps();
+    el["step-num"].textContent=step; el["step-of"].textContent=`/ ${totalSteps()}`;
+    el["timeline-range"].max=totalSteps(); el["timeline-range"].value=step;
+    el["back-btn"].disabled=step===0; el["step-btn"].disabled=step>=totalSteps();
+    el["play-btn"].textContent=playing?"Pause":"Play"; el["story-line"].textContent=primary.story;
   }
-
-  function goToStep(i) {
-    stepIndex = Math.max(0, Math.min(i, totalSteps()));
-    render();
-    if (stepIndex >= totalSteps()) stopPlaying();
+  function stop(){ playing=false; clearTimeout(timer); if(key) render(); }
+  function go(value){ step=Math.max(0,Math.min(value,totalSteps())); if(step===totalSteps())playing=false; render(); }
+  function tick(){ timer=setTimeout(()=>{go(step+1); if(playing&&step<totalSteps())tick();},Number(el["speed-range"].value)); }
+  function loadModel(value){
+    stop(); model=value; const options=matching(model); el["scenario-select"].replaceChildren(...options.map(k=>new Option(scenarios[k].name,k)));
+    key=options[0]; step=0; el["model-select"].value=model;
+    el["eyebrow-model"].textContent=models[model].name.toLowerCase(); el["model-title"].textContent=models[model].name;
+    el["model-description"].textContent=models[model].description;
+    el["model-detail"].textContent="Node color records activation time. Hover LT nodes to inspect thresholds; edge width reflects custom weights.";
+    el["footer-model"].textContent=`${models[model].parameter} · ${graph.nodes.length} nodes, ${graph.links.length} edges`; render();
   }
-
-  function stepForward() {
-    if (stepIndex >= totalSteps()) {
-      stopPlaying();
-      return;
-    }
-    goToStep(stepIndex + 1);
-  }
-
-  function startPlaying() {
-    if (stepIndex >= totalSteps()) stepIndex = 0;
-    playing = true;
-    scheduleTick();
-    render();
-  }
-
-  function stopPlaying() {
-    playing = false;
-    if (timer) clearTimeout(timer);
-    timer = null;
-    render();
-  }
-
-  function scheduleTick() {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(() => {
-      stepForward();
-      if (playing && stepIndex < totalSteps()) scheduleTick();
-      else playing = false;
-    }, Number(el.speed.value));
-  }
-
-  function loadScenario(key) {
-    stopPlaying();
-    currentKey = key;
-    stepIndex = 0;
-    crossedFractureAt = null;
-    renderChart(scenario());
-    render();
-  }
-
-  function loadModel(key) {
-    currentModel = key;
-    const matchingKeys = refreshScenarioOptions();
-    const definition = modelDefinitions[currentModel];
-    const displayName = definition.name;
-
-    el.modelSelect.value = currentModel;
-    el.eyebrowModel.textContent = displayName.toLowerCase();
-    el.modelTitle.textContent = displayName;
-    el.modelDescription.textContent = definition.description;
-    el.modelDetail.textContent =
-      "Every run is precomputed with fixed random seeds, so comparisons are " +
-      "repeatable. Regenerate the data with model/generate_simulation.py to " +
-      "change parameters or seed sets.";
-    el.footerModel.textContent = `${displayName.toLowerCase()} · ${definition.parameter} · ${graph.nodes.length} nodes, ${graph.links.length} edges`;
-
-    loadScenario(matchingKeys[0]);
-  }
-
-  // ---- events -------------------------------------------------------
-  el.modelSelect.addEventListener("change", (e) => loadModel(e.target.value));
-  el.scenarioSelect.addEventListener("change", (e) => loadScenario(e.target.value));
-  el.play.addEventListener("click", () => (playing ? stopPlaying() : startPlaying()));
-  el.step.addEventListener("click", () => {
-    stopPlaying();
-    stepForward();
-  });
-  el.reset.addEventListener("click", () => loadScenario(currentKey));
-  el.speed.addEventListener("input", () => {
-    if (playing) scheduleTick();
-  });
-
-  loadModel(currentModel);
+  el["model-select"].replaceChildren(...modelKeys.map(k=>new Option(models[k].name,k)));
+  el["model-select"].onchange=e=>loadModel(e.target.value);
+  el["scenario-select"].onchange=e=>{stop();key=e.target.value;step=0;render();};
+  el["play-btn"].onclick=()=>{if(playing)stop();else{if(step>=totalSteps())step=0;playing=true;render();tick();}};
+  el["back-btn"].onclick=()=>{stop();go(step-1);}; el["step-btn"].onclick=()=>{stop();go(step+1);};
+  el["reset-btn"].onclick=()=>{stop();go(0);}; el["timeline-range"].oninput=e=>{stop();go(+e.target.value);};
+  el["speed-range"].oninput=()=>{if(playing){clearTimeout(timer);tick();}};
+  el["compare-toggle"].onchange=()=>{step=Math.min(step,totalSteps());render();};
+  el["export-btn"].onclick=()=>{
+    const clone=document.getElementById("network").cloneNode(true);
+    clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
+    const style=document.createElementNS("http://www.w3.org/2000/svg","style");
+    style.textContent=".link{stroke:#c7cbbd;stroke-width:1.2}.link.pulsed{stroke:#c08a25}.ring{fill:none;stroke-width:2.4}.faction-hi{stroke:#a83b2e}.faction-officer{stroke:#1f5d63}.seed{stroke-width:3.4}.node text{font:9px monospace;fill:#656b60;text-anchor:middle}.threshold-label{font-size:8px;fill:#1b1f1c}";
+    clone.prepend(style);
+    const source=new XMLSerializer().serializeToString(clone);
+    const image=new Image(), blob=new Blob([source],{type:"image/svg+xml;charset=utf-8"}), url=URL.createObjectURL(blob);
+    image.onload=()=>{const canvas=document.createElement("canvas");canvas.width=W;canvas.height=H;const ctx=canvas.getContext("2d");
+      ctx.fillStyle="#f5f6f1";ctx.fillRect(0,0,W,H);ctx.drawImage(image,0,0);URL.revokeObjectURL(url);
+      const a=document.createElement("a");a.download=`infodiff-${key}-step-${step}.png`;a.href=canvas.toDataURL("image/png");a.click();}; image.src=url;
+  };
+  loadModel(model);
 })();

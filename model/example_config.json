@@ -1,0 +1,13 @@
+{
+  "graph": "erdos_renyi:50,0.08",
+  "models": ["independent_cascade", "linear_threshold"],
+  "probabilities": [0.1, 0.2, 0.3],
+  "threshold_distribution": "normal",
+  "threshold_parameters": {"mean": 0.3, "std": 0.08},
+  "seed_strategies": [
+    {"key": "single", "name": "Node 0", "seeds": [0]},
+    {"key": "pair", "name": "Nodes 0 and 1", "seeds": [0, 1]}
+  ],
+  "runs": 100,
+  "random_seed": 42
+}
