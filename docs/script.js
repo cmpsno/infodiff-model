@@ -7,9 +7,9 @@
   const el = Object.fromEntries([
     "model-select","scenario-select","play-btn","back-btn","step-btn","reset-btn",
     "export-btn","speed-range","compare-toggle","timeline-range","step-num","step-of",
-    "bar-concept","bar-misconception","count-concept","count-misconception","story-line","eyebrow-model",
+    "bar-reach","bar-market","count-reach","count-market","story-line","eyebrow-model",
     "model-title","model-description","model-detail","footer-model","comparison-panel",
-    "primary-label","comparison-label"
+    "primary-label","comparison-label","event-card","market-strip"
   ].map(id => [id, document.getElementById(id)]));
   let model = modelKeys[0], key, step = 0, playing = false, timer;
   const nodes = graph.nodes.map(n => ({...n}));
@@ -50,7 +50,8 @@
       .style("fill",d=>active.has(d.id)?color(activationTime(s,d.id)):null)
       .append("title").text(d => {
         const threshold = s.thresholds?.[String(d.id)];
-        return `${d.label || ("Node " + d.id)} · mastered step ${activationTime(s,d.id)}${threshold===undefined?"":` · threshold ${threshold.toFixed(2)}`}`;
+        const impact = d.impact ? ` · ${d.impact}` : "";
+        return `${d.label || ("Node " + d.id)} · rumor arrived step ${activationTime(s,d.id)}${impact}${threshold===undefined?"":` · threshold ${threshold.toFixed(2)}`}`;
       });
     groups.append("text").attr("dy",22).text(d=>d.short||d.id);
     if (s.model==="linear_threshold" && s.thresholds) {
@@ -86,11 +87,14 @@
     if(other){ drawNetwork("#comparison-network",other,Math.min(step,other.steps.length-1)); el["comparison-label"].textContent=models[other.model].name; }
     drawChart(primary,other);
     const active=activeAt(primary,Math.min(step,primary.steps.length-1));
-    const factions=d3.rollup(graph.nodes,v=>v.length,d=>d.faction);
-    for(const [faction,prefix] of [["concept","concept"],["misconception","misconception"]]){
-      const count=graph.nodes.filter(n=>n.faction===faction&&active.has(n.id)).length, total=factions.get(faction)||graph.nodes.length;
-      el[`bar-${prefix}`].style.width=`${100*count/total}%`; el[`count-${prefix}`].textContent=`${count}/${total}`;
-    }
+    const nonMarket=graph.nodes.filter(n=>n.faction!=="market"), market=graph.nodes.filter(n=>n.faction==="market");
+    const reachCount=nonMarket.filter(n=>active.has(n.id)).length, marketCount=market.filter(n=>active.has(n.id)).length;
+    el["bar-reach"].style.width=`${100*reachCount/nonMarket.length}%`; el["count-reach"].textContent=`${reachCount}/${nonMarket.length}`;
+    el["bar-market"].style.width=`${100*marketCount/market.length}%`; el["count-market"].textContent=`${marketCount}/${market.length}`;
+    el["market-strip"].replaceChildren(...market.filter(n=>active.has(n.id)).map(n=>{
+      const chip=document.createElement("span"); chip.className="market-chip";
+      chip.textContent=n.impact||n.short; chip.title=n.label||n.short; return chip;
+    }));
     el["step-num"].textContent=step; el["step-of"].textContent=`/ ${totalSteps()}`;
     el["timeline-range"].max=totalSteps(); el["timeline-range"].value=step;
     el["back-btn"].disabled=step===0; el["step-btn"].disabled=step>=totalSteps();
@@ -98,13 +102,13 @@
   }
   function stop(){ playing=false; clearTimeout(timer); if(key) render(); }
   function go(value){ step=Math.max(0,Math.min(value,totalSteps())); if(step===totalSteps())playing=false; render(); }
-  function tick(){ timer=setTimeout(()=>{go(step+1); if(playing&&step<totalSteps())tick(); else if(autoplay){ timer=setTimeout(()=>{ if(!autoplay) return; step=0; playing=true; render(); tick(); },1600); } },Number(el["speed-range"].value)); }
+  function tick(){ timer=setTimeout(()=>{go(step+1); if(playing&&step<totalSteps())tick(); else if(autoplay){ timer=setTimeout(()=>{ if(!autoplay) return; startLoop(); },1600); } },Number(el["speed-range"].value)); }
   function loadModel(value){
     stop(); model=value; const options=matching(model); el["scenario-select"].replaceChildren(...options.map(k=>new Option(scenarios[k].name,k)));
     key=options[0]; step=0; el["model-select"].value=model;
     el["eyebrow-model"].textContent=models[model].name.toLowerCase(); el["model-title"].textContent=models[model].name;
     el["model-description"].textContent=models[model].description;
-    el["model-detail"].textContent="Node color records the mastery step. Hover LT nodes to inspect thresholds; misconceptions carry higher thresholds than core concepts.";
+    el["model-detail"].textContent="Node color records the step the rumor arrived. Hover LT nodes to inspect thresholds; algos believe the fastest, retail needs the most confirmation.";
     el["footer-model"].textContent=`${models[model].parameter} · ${graph.nodes.length} nodes, ${graph.links.length} edges`; render();
   }
   el["model-select"].replaceChildren(...modelKeys.map(k=>new Option(models[k].name,k)));
@@ -119,7 +123,7 @@
     const clone=document.getElementById("network").cloneNode(true);
     clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
     const style=document.createElementNS("http://www.w3.org/2000/svg","style");
-    style.textContent=".link{stroke:#c7cbbd;stroke-width:1.2}.link.pulsed{stroke:#c08a25}.ring{fill:none;stroke-width:2.4}.faction-misconception{stroke:#a83b2e}.faction-concept{stroke:#1f5d63}.seed{stroke-width:3.4}.node text{font:9px monospace;fill:#656b60;text-anchor:middle}.threshold-label{font-size:8px;fill:#1b1f1c}";
+    style.textContent=".link{stroke:#c7cbbd;stroke-width:1.2}.link.pulsed{stroke:#c08a25}.ring{fill:none;stroke-width:2.4}.faction-source{stroke:#c08a25}.faction-media{stroke:#1f5d63}.faction-participant{stroke:#6b5b95}.faction-market{stroke:#2e7d4f}.seed{stroke-width:3.4}.node text{font:9px monospace;fill:#656b60;text-anchor:middle}.threshold-label{font-size:8px;fill:#1b1f1c}";
     clone.prepend(style);
     const source=new XMLSerializer().serializeToString(clone);
     const image=new Image(), blob=new Blob([source],{type:"image/svg+xml;charset=utf-8"}), url=URL.createObjectURL(blob);
@@ -128,12 +132,21 @@
       const a=document.createElement("a");a.download=`infodiff-${key}-step-${step}.png`;a.href=canvas.toDataURL("image/png");a.click();}; image.src=url;
   };
   loadModel(model);
-  /* Guided intro: autoplay the core-pair sequence on loop until the viewer takes over. */
-  let autoplay = true;
-  for (const id of ["play-btn","back-btn","step-btn","reset-btn","timeline-range","speed-range","model-select","scenario-select","compare-toggle","export-btn"]) {
-    el[id].addEventListener("pointerdown", () => { autoplay = false; }, { capture: true });
+  /* Guided intro: the rumor's opening frame, then autoplay the rate-cut
+     sequence on loop until the viewer takes over. */
+  let autoplay = true, cardTimer;
+  function showEventCard(){
+    const card = el["event-card"];
+    card.hidden = false; card.classList.remove("fading");
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(()=>{ card.classList.add("fading"); setTimeout(()=>{ card.hidden = true; }, 480); }, 1400);
   }
-  el["scenario-select"].value = "lt_core_pair";
-  key = "lt_core_pair"; step = 0;
-  playing = true; render(); tick();
+  function hideEventCard(){ clearTimeout(cardTimer); el["event-card"].hidden = true; }
+  function startLoop(){ step = 0; playing = true; showEventCard(); render(); tick(); }
+  for (const id of ["play-btn","back-btn","step-btn","reset-btn","timeline-range","speed-range","model-select","scenario-select","compare-toggle","export-btn"]) {
+    el[id].addEventListener("pointerdown", () => { autoplay = false; hideEventCard(); }, { capture: true });
+  }
+  el["scenario-select"].value = "lt_rate_cut";
+  key = "lt_rate_cut";
+  startLoop();
 })();

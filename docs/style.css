@@ -494,12 +494,81 @@ footer a { color: var(--muted); }
   .viewport-grid { grid-template-columns: 1fr; }
 }
 
-/* Concept-graph semantics: teal rings = core concepts, red rings = misconceptions. */
-.node circle.ring.faction-concept { stroke: var(--officer); }
-.node circle.ring.faction-misconception { stroke: var(--hi); }
-.faction-row .swatch.concept { border-color: var(--officer); }
-.faction-row .swatch.misconception { border-color: var(--hi); }
-.faction-row .bar-fill.concept { background: var(--officer); }
-.faction-row .bar-fill.misconception { background: var(--hi); }
-.legend-swatch.ring-concept { border: 2.4px solid var(--officer); background: transparent; }
-.legend-swatch.ring-misconception { border: 2.4px solid var(--hi); background: transparent; }
+/* Rumor-network semantics:
+   gold rings = rumor sources, teal rings = media channels,
+   purple rings = market participants, green rings = market outcomes. */
+.node circle.ring.faction-source { stroke: var(--gold); }
+.node circle.ring.faction-media { stroke: var(--officer); }
+.node circle.ring.faction-participant { stroke: #6b5b95; }
+.node circle.ring.faction-market { stroke: #2e7d4f; }
+.faction-row .swatch.reach { border-color: var(--gold); }
+.faction-row .swatch.market { border-color: #2e7d4f; }
+.faction-row .bar-fill.reach { background: var(--gold); }
+.faction-row .bar-fill.market { background: #2e7d4f; }
+.legend-swatch.ring-source { border: 2.4px solid var(--gold); background: transparent; }
+.legend-swatch.ring-media { border: 2.4px solid var(--officer); background: transparent; }
+.legend-swatch.ring-participant { border: 2.4px solid #6b5b95; background: transparent; }
+.legend-swatch.ring-market { border: 2.4px solid #2e7d4f; background: transparent; }
+
+/* Event card: the rumor's opening frame. */
+.network-panel { position: relative; }
+.event-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(27, 31, 28, 0.88);
+  border-radius: 6px;
+  z-index: 5;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+.event-card[hidden] { display: none; }
+.event-card.fading { opacity: 0; }
+.event-kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+}
+.event-headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(30px, 4.6vw, 52px);
+  color: #f5f6f1;
+  letter-spacing: -0.01em;
+}
+.event-sub {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: #b9bdb2;
+}
+
+/* Market strip: price moves as the rumor reaches market nodes. */
+.market-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  min-height: 34px;
+  align-items: center;
+}
+.market-strip:empty { display: none; }
+.market-chip {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid #2e7d4f;
+  border-left-width: 4px;
+  border-radius: 3px;
+  padding: 6px 10px;
+  animation: chip-in 0.4s ease;
+}
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}

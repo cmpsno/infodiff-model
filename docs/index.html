@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>How understanding spreads through a concept graph</title>
-<meta name="description" content="Two classic diffusion models repurposed as a learner model: watch an 'aha' spread across a Fourier concept graph under Independent Cascade and Linear Threshold dynamics." />
+<title>How a rate-cut rumor moves the market</title>
+<meta name="description" content="Two classic diffusion models on a rumor network: watch a Fed rate-cut rumor spread from the FOMC through media and trading desks until it moves yields, equities, and gold." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,9 +18,9 @@
       <span class="dot-hi"></span><span class="dot-officer"></span>
       infodiff-model · <span id="eyebrow-model">independent cascade</span>
     </div>
-    <h1>Get frequency, and phase, spectrum, and superposition follow.</h1>
+    <h1>Someone whispers &ldquo;rate cut.&rdquo; The whole market moves.</h1>
     <p class="dek">
-      Watch learning spread from idea to idea.
+      Watch a rumor spread from the Fed to gold.
     </p>
   </header>
 
@@ -52,6 +52,11 @@
     <div class="viewport-grid">
       <div class="network-panel"><h2 id="primary-label">Independent Cascade</h2>
         <svg id="network" viewBox="0 0 820 620" role="img" aria-label="Primary diffusion network"></svg>
+        <div class="event-card" id="event-card" hidden>
+          <div class="event-kicker">BREAKING</div>
+          <div class="event-headline">FED CUTS RATES</div>
+          <div class="event-sub">a rumor starts at the FOMC</div>
+        </div>
       </div>
       <div class="network-panel" id="comparison-panel"><h2 id="comparison-label">Linear Threshold</h2>
         <svg id="comparison-network" viewBox="0 0 820 620" role="img" aria-label="Comparison diffusion network"></svg>
@@ -66,38 +71,42 @@
         </div>
         <div class="faction-split">
           <div class="faction-row">
-            <span class="swatch concept"></span>
-            <span>Core concepts</span>
-            <span class="bar-track"><span class="bar-fill concept" id="bar-concept" style="width:0%"></span></span>
-            <span class="count" id="count-concept">0/5</span>
+            <span class="swatch reach"></span>
+            <span>Rumor reach</span>
+            <span class="bar-track"><span class="bar-fill reach" id="bar-reach" style="width:0%"></span></span>
+            <span class="count" id="count-reach">0/12</span>
           </div>
           <div class="faction-row">
-            <span class="swatch misconception"></span>
-            <span>Misconceptions</span>
-            <span class="bar-track"><span class="bar-fill misconception" id="bar-misconception" style="width:0%"></span></span>
-            <span class="count" id="count-misconception">0/4</span>
+            <span class="swatch market"></span>
+            <span>Market moved</span>
+            <span class="bar-track"><span class="bar-fill market" id="bar-market" style="width:0%"></span></span>
+            <span class="count" id="count-market">0/8</span>
           </div>
         </div>
         <p class="story-line" id="story-line"></p>
       </div>
 
       <div class="card">
-        <h2>Cumulative mastery</h2>
+        <h2>Cumulative reach</h2>
         <svg id="chart" viewBox="0 0 260 110"></svg>
       </div>
 
       <div class="card">
         <h2>Legend</h2>
         <div class="legend">
-          <div class="legend-item"><span class="legend-swatch ring-concept"></span> Ring: core concept</div>
-          <div class="legend-item"><span class="legend-swatch ring-misconception"></span> Ring: misconception (M1–M4)</div>
-          <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: mastered / misconception resolved</div>
-          <div class="legend-item"><span class="activation-gradient"></span> Fill shade: mastery step</div>
-          <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: not yet mastered</div>
+          <div class="legend-item"><span class="legend-swatch ring-source"></span> Ring: rumor source</div>
+          <div class="legend-item"><span class="legend-swatch ring-media"></span> Ring: media channel</div>
+          <div class="legend-item"><span class="legend-swatch ring-participant"></span> Ring: market participant</div>
+          <div class="legend-item"><span class="legend-swatch ring-market"></span> Ring: market outcome</div>
+          <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: heard the rumor</div>
+          <div class="legend-item"><span class="activation-gradient"></span> Fill shade: step the rumor arrived</div>
+          <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: hasn't heard it yet</div>
         </div>
       </div>
     </aside>
   </main>
+
+  <section class="market-strip" id="market-strip" aria-live="polite" aria-label="Market impact"></section>
 
   <section class="about">
     <div>
@@ -106,28 +115,28 @@
       <p id="model-detail"></p>
     </div>
     <div>
-      <h3>The concept graph</h3>
+      <h3>The rumor network</h3>
       <p>
-        The network is a hand-built concept graph for one learning domain:
-        Fourier / sine waves. Five <strong>core concepts</strong> (frequency,
-        amplitude, phase, superposition, spectrum) and four
-        <strong>misconceptions</strong> from an adaptive tutor's taxonomy —
-        M1 (faster wiggle = taller wave), M2 (adding waves adds their
-        frequencies), M3 (phase shift changes pitch), M4 (a square wave
-        contains one frequency). Edges are prerequisite links.
+        The network is a hand-built map of how a rate-cut rumor travels:
+        <strong>2 rumor sources</strong> (the FOMC, a Fed speaker),
+        <strong>3 media channels</strong> (wires, social, TV),
+        <strong>7 market participants</strong> (algos, desks, market makers,
+        bond desks, economists, retail, options), and
+        <strong>8 market outcomes</strong> (fed funds futures, 2Y and 10Y
+        yields, S&P 500, Nasdaq, VIX, the dollar, gold). Edges are
+        information-flow links, weighted by how fast the channel carries news.
       </p>
       <p>
-        Here, the rings let you see whether understanding stays inside the
-        core concepts or jumps to the misconceptions: a misconception node
-        lighting up means it got <em>resolved</em>. Misconceptions carry
-        higher thresholds — they only resolve once most of their
-        prerequisites are mastered.
+        The rings let you see where the rumor is: gold rings start it, teal
+        rings transmit it, purple rings trade on it, green rings are the
+        prices that move. A green node lighting up means the market moved —
+        the chips below the graph read out each move as it happens.
       </p>
     </div>
   </section>
 
   <footer>
-    <span id="footer-model">independent cascade · p = 0.2 · 9 nodes, 13 edges</span>
+    <span id="footer-model">independent cascade · p = 0.6 · 20 nodes, 30 edges</span>
     <span><a href="https://github.com/cmpsno/infodiff-model">source on GitHub</a></span>
   </footer>
 
