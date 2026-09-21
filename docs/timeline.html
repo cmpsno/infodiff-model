@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The road to the hike · infodiff-model</title>
+<meta name="description" content="Every Fed decision, CPI print, and macro shock from 2023 to the September 16, 2026 rate hike." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .tl-filters { display: flex; flex-wrap: wrap; gap: 8px; padding: 22px 0 6px; }
+  .tl-filter {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .05em;
+    background: transparent; border: 1px solid var(--line); border-radius: 20px;
+    padding: 6px 14px; color: var(--muted); cursor: pointer;
+  }
+  .tl-filter.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .tl { list-style: none; margin: 0; padding: 10px 0 30px; }
+  .tl-year {
+    font-family: var(--font-display); font-size: 30px; font-weight: 600;
+    padding: 26px 0 6px;
+  }
+  .tl-item {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    padding: 11px 0; border-bottom: 1px dotted var(--line);
+  }
+  .tl-item:last-child { border-bottom: none; }
+  .tl-item.hidden { display: none; }
+  .tl-date { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); padding-top: 4px; }
+  .tl-tag {
+    display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+    letter-spacing: .07em; text-transform: uppercase; border-radius: 3px;
+    padding: 2px 7px; margin-bottom: 5px; color: #fff;
+  }
+  .tl-tag.fed { background: var(--gold); }
+  .tl-tag.rates { background: var(--officer); }
+  .tl-tag.cpi { background: var(--hi); }
+  .tl-tag.econ { background: #656b60; }
+  .tl-tag.markets { background: #2e7d4f; }
+  .tl-head { font-size: 15.5px; font-weight: 600; }
+  .tl-head .flag { color: var(--hi); }
+  .tl-sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .tl-note { font-size: 13px; color: var(--muted); padding: 18px 0 0; max-width: 760px; }
+  @media (max-width: 640px) { .tl-item { grid-template-columns: 1fr; gap: 2px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">
+      <span class="dot-hi"></span><span class="dot-officer"></span>
+      infodiff-model · timeline
+    </div>
+    <h1>The road to the hike.</h1>
+    <p class="dek">
+      Every Fed decision, CPI print, and shock that set up September 16, 2026.
+    </p>
+  </header>
+
+  <div class="tl-filters" id="tl-filters" aria-label="Filter timeline">
+    <button class="tl-filter active" data-f="all">All</button>
+    <button class="tl-filter" data-f="fed">Fed</button>
+    <button class="tl-filter" data-f="rates">Rates</button>
+    <button class="tl-filter" data-f="cpi">CPI</button>
+    <button class="tl-filter" data-f="econ">Economics</button>
+    <button class="tl-filter" data-f="markets">Markets</button>
+  </div>
+
+  <ul class="tl" id="tl">
+    <li class="tl-year">2023</li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">FEB 1</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC hikes 25bp → 4.50–4.75%</div><div class="tl-sub">First of four 2023 hikes.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">MAR 22</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC hikes 25bp → 4.75–5.00%</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">MAY 3</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC hikes 25bp → 5.00–5.25%</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JUN 14</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds at 5.00–5.25%</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">JUN</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head">CPI falls to 3.0% YoY — the cycle low</div><div class="tl-sub">Down from 6.4% in January.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JUL 26</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC hikes 25bp → 5.25–5.50% — the terminal rate</div><div class="tl-sub">Last hike of the tightening cycle… for three years.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">SEP 20 · NOV 1 · DEC 13</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">Three holds at 5.25–5.50%</div></div></li>
+    <li class="tl-item" data-cat="rates"><div class="tl-date">OCT 20</div><div><span class="tl-tag rates">Rates</span><div class="tl-head">10-year Treasury crosses 5% intraday (~5.02%)</div><div class="tl-sub">First time since 2007, on hawkish Powell remarks; buyers pull it back to 4.83% within hours.</div></div></li>
+    <li class="tl-item" data-cat="rates"><div class="tl-date">OCT</div><div><span class="tl-tag rates">Rates</span><div class="tl-head">30-year mortgage ~7.79% — the cycle peak</div></div></li>
+
+    <li class="tl-year">2024</li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JAN 31 · MAR 20 · MAY 1 · JUN 12 · JUL 31</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">Five holds at 5.25–5.50%</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">SEP 18</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 50bp → 4.75–5.00%</div><div class="tl-sub">First cut since March 2020; 11–1 vote.</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">SEP</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head">CPI 2.4% YoY — the 2024 low</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">NOV 7</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 25bp → 4.50–4.75%</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">NOV 11</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">S&amp;P 500 first closes above 6,000</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">DEC 18</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 25bp → 4.25–4.50%</div></div></li>
+
+    <li class="tl-year">2025</li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JAN 29 · MAR 19 · MAY 7 · JUN 18 · JUL 30</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">Five holds at 4.25–4.50%</div></div></li>
+    <li class="tl-item" data-cat="rates"><div class="tl-date">JAN</div><div><span class="tl-tag rates">Rates</span><div class="tl-head">30-year mortgage hits ~7% — the year's high</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">JAN → DEC</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head">CPI arcs: 3.0% → 2.3% (Apr) → 3.0% (Sep) → 2.7% (Dec)</div><div class="tl-sub">October print lost to the shutdown.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">SEP 17</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 25bp → 4.00–4.25% — the "risk management cut"</div><div class="tl-sub">QT to end December 1.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">OCT 29</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 25bp → 3.75–4.00%</div><div class="tl-sub">Dissents both ways: Miran wanted −50bp, Schmid wanted a hold.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">NOV</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">Six-week federal shutdown ends</div><div class="tl-sub">October/November jobs and inflation data delayed.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">DEC 10</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC cuts 25bp → 3.50–3.75% — 9–3 vote</div><div class="tl-sub">SEP: 2025 GDP 1.7%, 2026 GDP 2.3%, unemployment 4.5% → 4.4%.</div></div></li>
+
+    <li class="tl-year">2026</li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JAN 28</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds at 3.50–3.75%</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">JAN 28</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">S&amp;P 500 first tops 7,000 intraday</div><div class="tl-sub">Cool CPI plus Q4 tech earnings.</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">FEB 13</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head">January CPI 2.4% YoY — eight-month low</div><div class="tl-sub">Released late on the partial shutdown.</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">FEB</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">Big Four guide $610–650B combined 2026 AI capex</div><div class="tl-sub">Stocks then shed $950B in value on the spend.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">FEB 28</div><div><span class="tl-tag econ">Economics</span><div class="tl-head"><span class="flag">Iran war begins — Hormuz effectively closed</span></div><div class="tl-sub">IEA: ~11M barrels/day removed by end-March; "largest energy supply shock in recorded history."</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">MAR 18</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds at 3.50–3.75%</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">MAR → MAY</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head">Oil shock hits prices: 3.3% → 3.8% → 4.2% (May peak)</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">APR 13</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">Brent crude peaks above $126/bbl</div><div class="tl-sub">From ~$72 pre-war; U.S. naval blockade of Iran begins; jet fuel more than doubles.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">APR 29</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds — four officials break ranks hawkish</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">APR</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">Hyperscalers raise 2026 AI capex to ~$700–725B on Q1 earnings</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">MAY 13 → 22</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">Kevin Warsh confirmed (54–45), sworn in May 22</div><div class="tl-sub">Succeeds Jerome Powell as the 17th Fed Chair.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">JUN 14</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">U.S.–Iran ceasefire announced; Hormuz begins reopening</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JUN 17</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds — Warsh's first press conference</div><div class="tl-sub">Refuses to call it a "pause"; defends the 2% target.</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">JUL</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">Q2 calls push 2026 AI capex to ~$730B; 2027 estimates top $1T</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">JUL 29</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">FOMC holds 9–3 — three dissents <em>for</em> a hike</div><div class="tl-sub">30-year yield closes at 5.20%, a 19-year high; 2-year slips to 4.22%.</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">AUG 28</div><div><span class="tl-tag fed">Fed</span><div class="tl-head">Warsh at Jackson Hole: "we have work to do"</div><div class="tl-sub">September hike odds jump 35% → 55%+; 2-year 4.22% → 4.30%.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">AUG</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">Real wages −0.3% YoY — five straight months of inflation beating pay</div><div class="tl-sub">Nominal pay growth +3.1%, slowest in 5+ years.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">SEP 4</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">August jobs beat: +162k vs ~55k expected; unemployment 4.1%</div></div></li>
+    <li class="tl-item" data-cat="cpi"><div class="tl-date">SEP 11 · 8:30AM</div><div><span class="tl-tag cpi">CPI</span><div class="tl-head"><span class="flag">August CPI 3.4% YoY — gasoline +27.4% YoY, a third of the monthly rise</span></div><div class="tl-sub">Hike odds jump to ~85% within minutes.</div></div></li>
+    <li class="tl-item" data-cat="rates"><div class="tl-date">SEP 14</div><div><span class="tl-tag rates">Rates</span><div class="tl-head">10-year intraday 5.014%; 30-year 5.386%</div><div class="tl-sub">Markets move before the Fed does.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">SEP 15</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">Iran war re-escalates — Brent $107–109; U.S. gas ~$4.37/gal</div><div class="tl-sub">Saudi Arabia shuts the Hormuz-bypass route.</div></div></li>
+    <li class="tl-item" data-cat="econ"><div class="tl-date">SEP 16</div><div><span class="tl-tag econ">Economics</span><div class="tl-head">August retail +1.2%; Q3 GDP tracking ~3% (TD Economics), GDPNow above 5%</div></div></li>
+    <li class="tl-item" data-cat="fed"><div class="tl-date">SEP 16</div><div><span class="tl-tag fed">Fed</span><div class="tl-head"><span class="flag">FOMC HIKES 25bp → 3.75–4.00% — unanimous 12–0, first hike since July 2023</span></div><div class="tl-sub">Dot plot median 4.1% end-2026; 16 of 19 see at least one more hike this year.</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">SEP 16 · CLOSE</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">S&amp;P −0.45% · Nasdaq −0.01% · VIX 17.71 · dollar +0.7% · gold ~$4,310</div><div class="tl-sub">10-year closes 5.006% — first close ≥5% since July 2007.</div></div></li>
+    <li class="tl-item" data-cat="rates"><div class="tl-date">SEP 17</div><div><span class="tl-tag rates">Rates</span><div class="tl-head">30-year mortgage 6.95% — 20-month high</div><div class="tl-sub">Still below the ~7.79% peak of October 2023.</div></div></li>
+    <li class="tl-item" data-cat="markets"><div class="tl-date">SEP</div><div><span class="tl-tag markets">Markets</span><div class="tl-head">Trump on Truth Social: rates should be 1%, not 3.9%</div></div></li>
+  </ul>
+
+  <p class="tl-note">
+    Sources: FOMC statements and meeting calendars via fedratecalc / fedprimerate; CPI via BLS and usinflationcalculator; yields and mortgage rates via Freddie Mac PMMS and Treasury data; Iran-war and oil figures via Reuters, IEA, and CEPR; capex and market closes via company earnings calls and market data. Where sources disagreed (e.g. gold's exact September 16 print), the range is noted.
+  </p>
+
+  <footer>
+    <span>timeline · jan 2023 → sep 2026</span>
+    <span><a href="index.html">← the simulation</a> · <a href="evaluation.html">did the model get it right?</a></span>
+  </footer>
+
+</div>
+
+<script>
+/* Category filter */
+(function () {
+  const buttons = Array.from(document.querySelectorAll(".tl-filter"));
+  const items = Array.from(document.querySelectorAll(".tl-item"));
+  const years = Array.from(document.querySelectorAll(".tl-year"));
+  buttons.forEach(btn => btn.addEventListener("click", () => {
+    buttons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const f = btn.dataset.f;
+    items.forEach(it => it.classList.toggle("hidden", f !== "all" && it.dataset.cat !== f));
+    years.forEach(y => {
+      let next = y.nextElementSibling, visible = false;
+      while (next && !next.classList.contains("tl-year")) {
+        if (next.classList.contains("tl-item") && !next.classList.contains("hidden")) { visible = true; break; }
+        next = next.nextElementSibling;
+      }
+      y.style.display = visible || f === "all" ? "" : "none";
+    });
+  }));
+})();
+</script>
+</body>
+</html>
