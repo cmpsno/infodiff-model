@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Did the model get September right? · infodiff-model</title>
+<meta name="description" content="An honest evaluation of the infodiff-model diffusion simulation against the real September 2026 CPI-to-rate-hike timeline." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .eval-section { padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .eval-section h2 { font-family: var(--font-display); font-size: 26px; font-weight: 600; margin: 0 0 14px; }
+  .timeline-list { list-style: none; margin: 0; padding: 0; }
+  .timeline-list li { display: grid; grid-template-columns: 150px 1fr; gap: 14px; padding: 9px 0; border-bottom: 1px dotted var(--line); }
+  .timeline-list li:last-child { border-bottom: none; }
+  .t-date { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); padding-top: 3px; }
+  .t-body { font-size: 15px; }
+  .t-body .src { color: var(--muted); font-size: 13px; }
+  .scorecard { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+  .scorecard th { text-align: left; font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .scorecard td { padding: 11px 12px; border-bottom: 1px dotted var(--line); vertical-align: top; }
+  .scorecard tr:last-child td { border-bottom: none; }
+  .verdict { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .05em; white-space: nowrap; }
+  .v-hit { color: #2e7d46; } .v-partial { color: var(--gold); } .v-miss { color: var(--hi); }
+  .miss-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .miss-card { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+  .miss-card h3 { font-size: 15.5px; margin: 0 0 8px; font-weight: 600; }
+  .miss-card p { font-size: 14px; color: var(--muted); margin: 0; }
+  .bottomline { font-family: var(--font-display); font-size: 22px; font-style: italic; line-height: 1.45; padding: 26px 0 4px; max-width: 800px; }
+  .score-big { font-family: var(--font-mono); font-size: 13px; color: var(--muted); margin-top: 6px; }
+  @media (max-width: 640px) { .timeline-list li { grid-template-columns: 1fr; gap: 2px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">
+      <span class="dot-hi"></span><span class="dot-officer"></span>
+      infodiff-model · evaluation
+    </div>
+    <h1>Did the model get September right?</h1>
+    <p class="dek">
+      We replayed the real timeline next to the simulation. Here is the score.
+    </p>
+  </header>
+
+  <section class="eval-section">
+    <h2>What actually happened</h2>
+    <ul class="timeline-list">
+      <li>
+        <div class="t-date">Aug 2026</div>
+        <div class="t-body">At Jackson Hole, Warsh says "all the good stuff had been invented… well, times sure have changed." Priors are set before the print. <span class="src">— AP/PBS</span></div>
+      </li>
+      <li>
+        <div class="t-date">Sep 11, 8:30am</div>
+        <div class="t-body">August CPI prints <strong>3.4%</strong>; core 0.3% vs 0.2% expected. <span class="src">— BLS</span></div>
+      </li>
+      <li>
+        <div class="t-date">minutes later</div>
+        <div class="t-body">Hike odds jump to <strong>~85%</strong> on prediction markets. <span class="src">— market pricing</span></div>
+      </li>
+      <li>
+        <div class="t-date">week of Sep 13</div>
+        <div class="t-body">30-year mortgage rate hits <strong>6.95%</strong>, highest in 1.5 years. <span class="src">— AP/PBS</span></div>
+      </li>
+      <li>
+        <div class="t-date">before Sep 16</div>
+        <div class="t-body">10-year Treasury tops <strong>5%</strong>, first time since 2023 — markets move before the Fed does. <span class="src">— AP/PBS</span></div>
+      </li>
+      <li>
+        <div class="t-date">Sep 16</div>
+        <div class="t-body">FOMC hikes <strong>25bp to 3.75–4.00%</strong> (3.9%), first hike in 3 years. Warsh: inflation "too high for too long." <span class="src">— FOMC, AP/PBS</span></div>
+      </li>
+      <li>
+        <div class="t-date">close, Sep 16</div>
+        <div class="t-body">10Y <strong>5.006%</strong> · S&amp;P <strong>−0.45%</strong> · Nasdaq <strong>−0.01%</strong> · VIX <strong>17.71</strong> · dollar <strong>+0.7%</strong> · gold <strong>~$4,310</strong>. Dot plot: one more hike this year. <span class="src">— market data</span></div>
+      </li>
+      <li>
+        <div class="t-date">same week</div>
+        <div class="t-body">Trump on Truth Social: rates should be <strong>1%</strong> instead of 3.9%. <span class="src">— AP/PBS</span></div>
+      </li>
+      <li>
+        <div class="t-date">the backdrop</div>
+        <div class="t-body">AI buildout capex + large federal deficits compete for bonds; Iran war lifts oil; chip and worker bottlenecks. Inflation outpaced wages five months straight. <span class="src">— AP/PBS</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="eval-section">
+    <h2>What the model predicted</h2>
+    <ul class="timeline-list">
+      <li>
+        <div class="t-date">wave 0</div>
+        <div class="t-body">Newswires carry the CPI print.</div>
+      </li>
+      <li>
+        <div class="t-date">wave 1</div>
+        <div class="t-body">Algos and prediction-market odds reprice within minutes.</div>
+      </li>
+      <li>
+        <div class="t-date">wave 2</div>
+        <div class="t-body">Macro desks, bond desks, economists pick it up.</div>
+      </li>
+      <li>
+        <div class="t-date">wave 3</div>
+        <div class="t-body">Social chatter, retail, options desks.</div>
+      </li>
+      <li>
+        <div class="t-date">waves 4–6</div>
+        <div class="t-body">Prices move: 2Y, 10Y, equities, VIX, dollar, gold. Full network (20/20) reached.</div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="eval-section">
+    <h2>The scorecard</h2>
+    <table class="scorecard">
+      <thead><tr><th>Model claim</th><th>Reality</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>News travels wires → algos → desks → public, in that order.</td>
+          <td>Print → odds jump in minutes → analyst notes → TV chatter.</td>
+          <td><span class="verdict v-hit">HIT</span></td>
+        </tr>
+        <tr>
+          <td>Hike odds reprice in minutes.</td>
+          <td>85% within minutes of the print.</td>
+          <td><span class="verdict v-hit">HIT</span></td>
+        </tr>
+        <tr>
+          <td>Bonds move before the decision, not after.</td>
+          <td>10Y topped 5% before Sep 16.</td>
+          <td><span class="verdict v-hit">HIT</span></td>
+        </tr>
+        <tr>
+          <td>Hawkish news pushes the dollar up, gold down.</td>
+          <td>Dollar +0.7%, gold tumbled to ~$4,310.</td>
+          <td><span class="verdict v-hit">HIT</span></td>
+        </tr>
+        <tr>
+          <td>The cascade starts at the CPI print.</td>
+          <td>Warsh's Jackson Hole speech had already set the priors; the print confirmed them.</td>
+          <td><span class="verdict v-partial">PARTIAL</span></td>
+        </tr>
+        <tr>
+          <td>Equities fall across the board.</td>
+          <td>Nasdaq barely moved (−0.01%); the damage was in rates, not stocks.</td>
+          <td><span class="verdict v-miss">MISS</span></td>
+        </tr>
+        <tr>
+          <td>All channels are media or market channels.</td>
+          <td>Trump's "1% instead of 3.9%" post drove the political-retail narrative the model has no node for.</td>
+          <td><span class="verdict v-miss">MISS</span></td>
+        </tr>
+        <tr>
+          <td>Information alone moves long yields.</td>
+          <td>AI capex + deficits competing for bonds, the Iran war oil shock, chip and worker bottlenecks — supply, not information, pushed the 10Y past 5%.</td>
+          <td><span class="verdict v-miss">MISS</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="score-big">4 hits · 1 partial · 3 misses</p>
+  </section>
+
+  <section class="eval-section">
+    <h2>What the model can't see</h2>
+    <div class="miss-grid">
+      <div class="miss-card">
+        <h3>1. The supply channel</h3>
+        <p>Borrowers compete for bonds whether or not anyone whispers. AI data-center debt, federal deficits, and war-driven oil prices moved the 10Y with no rumor needed. The network has no node for supply.</p>
+      </div>
+      <div class="miss-card">
+        <h3>2. The political channel</h3>
+        <p>A president demanding 1% on Truth Social is its own broadcast layer — reaching voters, not traders. The model treats all chatter as market chatter.</p>
+      </div>
+      <div class="miss-card">
+        <h3>3. The priors channel</h3>
+        <p>Jackson Hole in August did half the work. Diffusion models start at the event; real markets start at the expectation.</p>
+      </div>
+    </div>
+    <p class="bottomline">
+      "The model gets the plumbing right — who hears it first, and how prices follow — but it misses the politics and the supply side that actually moved the bond market."
+    </p>
+  </section>
+
+  <footer>
+    <span>evaluation · run against the September 2026 timeline</span>
+    <span><a href="index.html">← back to the simulation</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
