@@ -9,8 +9,8 @@ import networkx as nx
 
 from batch_simulate import run_batch
 from configuration import SimulationConfig
-from generate_simulation import THRESHOLD_SEED, build_scenarios_payload
-from graph_io import load_graph
+from generate_simulation import FOURIER_THRESHOLDS, THRESHOLD_SEED, build_scenarios_payload
+from graph_io import fourier_concept_graph, load_graph
 from independent_cascade import independent_cascade
 from linear_threshold import linear_threshold
 
@@ -59,10 +59,39 @@ class LinearThresholdTests(ResultContractMixin, unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "thresholds are missing"):
             linear_threshold(nx.path_graph(2), [0], {0: 0.5})
 
+    def test_frequency_first_spread_is_deterministic(self) -> None:
+        graph = fourier_concept_graph()
+        result = linear_threshold(graph, [0], FOURIER_THRESHOLDS)
+        self.assertEqual(result.steps, [[0], [2, 4], [3, 7], [1, 6, 8], [5]])
+        self.assert_valid_result(result, graph.number_of_nodes())
+
+    def test_misconception_seed_stalls(self) -> None:
+        graph = fourier_concept_graph()
+        result = linear_threshold(graph, [5], FOURIER_THRESHOLDS)
+        self.assertEqual(result.steps, [[5], [1]])
+        self.assert_valid_result(result, graph.number_of_nodes())
+
+
+class FourierGraphTests(unittest.TestCase):
+    def test_concept_graph_structure(self) -> None:
+        graph = fourier_concept_graph()
+        self.assertEqual(graph.number_of_nodes(), 9)
+        self.assertEqual(graph.number_of_edges(), 13)
+        kinds = [graph.nodes[n]["kind"] for n in graph.nodes]
+        self.assertEqual(kinds.count("concept"), 5)
+        self.assertEqual(kinds.count("misconception"), 4)
+        for node in graph.nodes:
+            self.assertTrue(graph.nodes[node]["label"])
+            self.assertTrue(graph.nodes[node]["short"])
+
+    def test_load_graph_fourier(self) -> None:
+        graph = load_graph("fourier")
+        self.assertEqual(graph.number_of_nodes(), 9)
+
 
 class GeneratedDataTests(unittest.TestCase):
     def test_every_model_has_scenarios_that_follow_the_playback_contract(self) -> None:
-        graph = nx.karate_club_graph()
+        graph = load_graph("fourier")
         scenarios = build_scenarios_payload(graph)
         self.assertEqual(
             {scenario["model"] for scenario in scenarios.values()},

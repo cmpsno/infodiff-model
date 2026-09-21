@@ -7,6 +7,9 @@ science, epidemiology and marketing research (Kempe, Kleinberg & Tardos,
 with a handful of people, how far does it spread through a social network,
 and how fast?
 
+Here it doubles as a learner model: run on a concept graph, each activation
+is a mastered concept, and the cascade is an "aha" spreading from idea to idea.
+
 Mechanics
 ---------
 1. A set of "seed" nodes starts active at step 0.

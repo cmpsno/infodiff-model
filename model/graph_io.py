@@ -16,6 +16,8 @@ def load_graph(source: str, *, random_seed: int = 42, **options) -> nx.Graph:
     """
     if source == "karate":
         return nx.karate_club_graph()
+    if source == "fourier":
+        return fourier_concept_graph()
     if source.startswith("erdos_renyi"):
         n, p = _generator_args(source, options, ("n", "p"), (34, 0.1))
         return nx.erdos_renyi_graph(int(n), float(p), seed=random_seed)
@@ -55,6 +57,44 @@ def load_graph(source: str, *, random_seed: int = 42, **options) -> nx.Graph:
     if suffix not in readers:
         raise ValueError(f"unsupported graph format: {suffix}")
     return nx.Graph(readers[suffix](path))
+
+
+def fourier_concept_graph() -> nx.Graph:
+    """Concept graph for the Fourier / sine-wave learning domain.
+
+    Nodes are core concepts and the four misconceptions (M1-M4) from the
+    adaptive tutor's taxonomy; edges are prerequisite/relatedness links.
+    Understanding spreads across this graph the way a rumor spreads across
+    a social network: node ids are stable integers, human-readable names
+    live in the ``label`` attribute, and ``kind`` marks core concepts vs
+    misconceptions.
+    """
+    nodes = {
+        0: ("frequency", "freq", "Frequency — cycles per second", "concept"),
+        1: ("amplitude", "amp", "Amplitude — wave height", "concept"),
+        2: ("phase", "phase", "Phase — where the cycle starts", "concept"),
+        3: ("superposition", "superpos.", "Superposition — waves add point by point", "concept"),
+        4: ("spectrum", "spectrum", "Spectrum — which frequencies a wave contains", "concept"),
+        5: ("M1", "M1", "M1 · faster wiggle = taller wave", "misconception"),
+        6: ("M2", "M2", "M2 · adding waves adds their frequencies", "misconception"),
+        7: ("M3", "M3", "M3 · phase shift changes pitch", "misconception"),
+        8: ("M4", "M4", "M4 · a square wave is one frequency", "misconception"),
+    }
+    edges = [
+        (0, 5), (1, 5),      # M1 confuses frequency and amplitude
+        (3, 6), (0, 6),      # M2 vs superposition / frequency
+        (2, 7), (0, 7),      # M3 vs phase / frequency
+        (4, 8), (3, 8),      # M4 vs spectrum / superposition
+        (0, 3), (3, 4),      # frequency -> superposition -> spectrum
+        (0, 2),              # frequency -> phase
+        (1, 3),              # amplitude -> superposition
+        (0, 4),              # frequency -> spectrum
+    ]
+    graph = nx.Graph()
+    for node, (name, short, label, kind) in nodes.items():
+        graph.add_node(node, name=name, short=short, label=label, kind=kind)
+    graph.add_edges_from(edges)
+    return graph
 
 
 def _generator_args(source, options, names, defaults):

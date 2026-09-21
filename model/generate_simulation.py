@@ -10,24 +10,35 @@ from linear_threshold import linear_threshold
 
 P = 0.2
 THRESHOLD_MIN, THRESHOLD_MAX, THRESHOLD_SEED = 0.1, 0.5, 152
+# Node ids on the fourier concept graph: 0 frequency, 1 amplitude, 2 phase,
+# 3 superposition, 4 spectrum, 5 M1, 6 M2, 7 M3, 8 M4.
+# Core concepts are easier to master (0.3); misconceptions only resolve once
+# most of their prerequisites are mastered (0.55).
+FOURIER_THRESHOLDS = {0: 0.3, 1: 0.3, 2: 0.3, 3: 0.3, 4: 0.3, 5: 0.55, 6: 0.55, 7: 0.55, 8: 0.55}
 SEEDING_SCENARIOS = [
- ("hub", "Start at the hub (Officer, node 33)", [33], 2, "The rumor starts with the single most-connected member of the club."),
- ("leader_hi", "Start with the instructor (Mr. Hi, node 0)", [0], 1, "Same idea, seeded from the rival hub on the other side of the eventual split."),
- ("peripheral", "Start at the edge (node 11, 1 connection)", [11], 14, "Seeded from the network's only degree-1 member — most cascades stall almost immediately."),
- ("dual", "Start in both factions at once (nodes 0 and 33)", [0, 33], 5, "Both future factions hear the rumor independently on the same day."),
+ ("frequency_first", "Frequency clicks first", [0], 2, "The learner finally gets frequency. Phase and spectrum follow, then superposition — the misconceptions fall one by one, M1 last: it needs both frequency and amplitude."),
+ ("superposition_clicks", "Superposition clicks", [3], 1, "Superposition pulls in amplitude and spectrum, then frequency — the misconceptions resolve in a burst, M3 last: it waits on phase."),
+ ("misconception_first", "Confront M1 head-on", [5], 14, "Attacking M1 ('faster = taller') directly teaches amplitude — then stalls. One misconception can't seed a curriculum."),
+ ("core_pair", "Frequency + amplitude together", [0, 1], 5, "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more."),
 ]
 
 def default_config():
-    return SimulationConfig(random_seed=THRESHOLD_SEED, seed_strategies=[
+    return SimulationConfig(graph="fourier", random_seed=THRESHOLD_SEED, threshold_distribution="custom",
+                            thresholds=dict(FOURIER_THRESHOLDS), seed_strategies=[
         {"key": k, "name": n, "seeds": s, "random_seed": r, "story": story}
         for k, n, s, r, story in SEEDING_SCENARIOS])
 
 def build_graph_payload(graph):
     nodes = []
     for node in sorted(graph.nodes):
-        club = graph.nodes[node].get("club")
-        item = {"id": node, "faction": "Hi" if club == "Mr. Hi" else "Officer" if club else "Unknown", "degree": graph.degree[node]}
-        if "source_id" in graph.nodes[node]: item["source_id"] = str(graph.nodes[node]["source_id"])
+        attrs = graph.nodes[node]
+        kind = attrs.get("kind")
+        club = attrs.get("club")
+        faction = kind if kind else ("Hi" if club == "Mr. Hi" else "Officer" if club else "Unknown")
+        item = {"id": node, "faction": faction, "degree": graph.degree[node]}
+        if "label" in attrs: item["label"] = str(attrs["label"])
+        if "short" in attrs: item["short"] = str(attrs["short"])
+        if "source_id" in attrs: item["source_id"] = str(attrs["source_id"])
         nodes.append(item)
     links = [{"source": u, "target": v, "weight": float(d.get("weight", 1.0))} for u, v, d in graph.edges(data=True)]
     return {"nodes": nodes, "links": links}
@@ -80,14 +91,14 @@ def generate(config):
     config.validate()
     graph = normalize_node_ids(load_graph(config.graph, random_seed=config.random_seed, **config.graph_options))
     models = {
-      "independent_cascade": {"name": "Independent Cascade", "short_name": "IC", "parameter": "configurable p", "description": "Newly active nodes get one chance to activate each neighbor."},
-      "linear_threshold": {"name": "Linear Threshold", "short_name": "LT", "parameter": f"{config.threshold_distribution} thresholds", "description": "Nodes adopt when normalized active-neighbor influence reaches their threshold."}}
+      "independent_cascade": {"name": "Independent Cascade", "short_name": "IC", "parameter": "configurable p", "description": "A newly mastered concept gets one chance to unlock each related concept — the 'aha' spreading."},
+      "linear_threshold": {"name": "Linear Threshold", "short_name": "LT", "parameter": f"{config.threshold_distribution} thresholds", "description": "A concept is mastered once enough of its neighbors are mastered — reinforcement."}}
     return {"model": "multiple", "graph_source": config.graph, "models": {k: models[k] for k in config.models}, "graph": build_graph_payload(graph), "scenarios": build_scenarios_payload(graph, config)}
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, help="JSON configuration file")
-    parser.add_argument("--graph", default="karate", help="karate, generator spec, or graph file")
+    parser.add_argument("--graph", default="fourier", help="fourier, karate, generator spec, or graph file")
     parser.add_argument("--model", choices=["ic", "lt", "both"], default="both")
     parser.add_argument("--p", type=float, nargs="+", default=[P])
     parser.add_argument("--seeds", type=int, nargs="+", help="one custom seed set")
@@ -98,7 +109,7 @@ def main():
     args = parse_args()
     if args.config:
         config = SimulationConfig.from_dict(json.loads(args.config.read_text(encoding="utf-8")))
-    elif args.graph == "karate" and args.model == "both" and args.p == [P] and not args.seeds:
+    elif args.graph == "fourier" and args.model == "both" and args.p == [P] and not args.seeds:
         config = default_config()
     else:
         models = {"ic": ["independent_cascade"], "lt": ["linear_threshold"], "both": ["independent_cascade", "linear_threshold"]}[args.model]

@@ -6,6 +6,14 @@ from dataclasses import dataclass, field
 from typing import Any
 
 
+def _coerce_node_id(node: Any) -> Any:
+    """Keep integer-like config keys as ints; leave labels like "M1" as strings."""
+    try:
+        return int(node)
+    except (TypeError, ValueError):
+        return str(node)
+
+
 @dataclass
 class SimulationConfig:
     """Serializable experiment configuration.
@@ -14,7 +22,7 @@ class SimulationConfig:
     Custom distributions use the node-to-threshold mapping in ``thresholds``.
     """
 
-    graph: str = "karate"
+    graph: str = "fourier"
     models: list[str] = field(
         default_factory=lambda: ["independent_cascade", "linear_threshold"]
     )
@@ -23,7 +31,7 @@ class SimulationConfig:
     threshold_parameters: dict[str, float] = field(
         default_factory=lambda: {"low": 0.1, "high": 0.5}
     )
-    thresholds: dict[int, float] | None = None
+    thresholds: dict[Any, float] | None = None
     seed_strategies: list[dict[str, Any]] = field(default_factory=list)
     runs: int = 1
     random_seed: int = 42
@@ -38,7 +46,8 @@ class SimulationConfig:
         values = dict(values)
         if values.get("thresholds") is not None:
             values["thresholds"] = {
-                int(node): float(value) for node, value in values["thresholds"].items()
+                _coerce_node_id(node): float(value)
+                for node, value in values["thresholds"].items()
             }
         return cls(**values)
 
