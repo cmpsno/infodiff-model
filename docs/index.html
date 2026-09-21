@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>How a hot CPI print moves the market</title>
-<meta name="description" content="Two classic diffusion models on a rumor network: watch September 2026's hot CPI print spread from the newswires through algos and trading desks until the market prices another Fed rate hike." />
+<title>CPI printed 3.4%. Five days later the Fed hiked. · infodiff-model</title>
+<meta name="description" content="September 2026's hot CPI print, the rate hike that followed, and an information-diffusion model scored against reality: 4 hits, 1 partial, 3 misses." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -16,13 +16,54 @@
   <header class="hero">
     <div class="eyebrow">
       <span class="dot-hi"></span><span class="dot-officer"></span>
-      infodiff-model · <span id="eyebrow-model">independent cascade</span>
+      infodiff-model · september 2026 · <span id="eyebrow-model">independent cascade</span>
     </div>
-    <h1>CPI came in hot. The market repriced the Fed in minutes.</h1>
+    <h1>CPI printed 3.4%. Five days later the Fed hiked.</h1>
     <p class="dek">
-      Watch September's hot CPI print turn into another rate hike in the market's mind.
+      This is what really happened. Then watch our model's version — and where it got it wrong.
     </p>
   </header>
+
+  <section class="reality" aria-label="What really happened">
+    <h2 class="section-title">The outcome, first</h2>
+    <div class="rt" id="rt">
+      <div class="rt-step">
+        <div class="rt-dot"></div>
+        <div class="rt-date">SEP 11 · 8:30AM</div>
+        <div class="rt-head">CPI prints 3.4%</div>
+        <div class="rt-sub">core 0.3% vs 0.2% expected</div>
+      </div>
+      <div class="rt-step">
+        <div class="rt-dot"></div>
+        <div class="rt-date">MINUTES LATER</div>
+        <div class="rt-head">Hike odds hit 85%</div>
+        <div class="rt-sub">repriced before lunch</div>
+      </div>
+      <div class="rt-step">
+        <div class="rt-dot"></div>
+        <div class="rt-date">SEP 13–15</div>
+        <div class="rt-head">10Y tops 5%</div>
+        <div class="rt-sub">first time since 2023 — before the Fed acts</div>
+      </div>
+      <div class="rt-step">
+        <div class="rt-dot"></div>
+        <div class="rt-date">SEP 16</div>
+        <div class="rt-head">FOMC hikes 25bp</div>
+        <div class="rt-sub">to 3.75–4.00% · "too high for too long"</div>
+      </div>
+      <div class="rt-step">
+        <div class="rt-dot"></div>
+        <div class="rt-date">THE CLOSE</div>
+        <div class="rt-head">S&amp;P −0.45%</div>
+        <div class="rt-sub">Nasdaq −0.01% · VIX 17.71 · dollar +0.7% · gold $4,310</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-anim" aria-label="The model's version">
+    <h2 class="section-title">The model's version</h2>
+    <p class="section-sub">Same five days, replayed as a diffusion network. Green chips marked ✓ matched reality — ✗ didn't.</p>
+  </section>
 
   <section class="controls" aria-label="Playback controls">
     <div class="select-control">
@@ -101,12 +142,19 @@
           <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: heard the rumor</div>
           <div class="legend-item"><span class="activation-gradient"></span> Fill shade: step the rumor arrived</div>
           <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: hasn't heard it yet</div>
+          <div class="legend-item"><span class="legend-swatch chip-hit-key"></span> Chip ✓: matched reality</div>
+          <div class="legend-item"><span class="legend-swatch chip-miss-key"></span> Chip ✗: missed reality</div>
         </div>
       </div>
     </aside>
   </main>
 
   <section class="market-strip" id="market-strip" aria-live="polite" aria-label="Market impact"></section>
+
+  <p class="verdict-strip">
+    The model's market calls: <strong>7 of 8 right.</strong> The miss — Nasdaq barely moved (−0.01%).
+    <a href="evaluation.html">Full scorecard →</a>
+  </p>
 
   <section class="about">
     <div>
@@ -117,29 +165,24 @@
     <div>
       <h3>The real event behind it</h3>
       <p>
-        On <strong>September 11, 2026</strong>, August CPI printed
-        <strong>3.4%</strong> — with core at 0.3% against 0.2% expected.
-        Hike odds jumped to 85%. Five days later the Fed raised
-        <strong>25bp to 3.75–4.00%</strong>, its first hike since 2023, and
-        the dot plot pointed to one more this year. The 10Y closed at
-        5.006%, the S&P fell 0.45%, the dollar rose 0.7%, and gold tumbled
-        to $4,310.
-      </p>
-      <p>
-        The network is a hand-built map of how that repricing traveled:
+        The timeline above is the ground truth: CPI at 3.4% on September 11,
+        hike odds to 85%, the 10Y topping 5% before the Fed acted, then
+        25bp to 3.75–4.00% on September 16 — the first hike since 2023.
+        The network is the model's version of the same five days:
         <strong>2 rumor sources</strong> (the FOMC, Chair Warsh),
         <strong>3 media channels</strong> (wires, social, TV),
         <strong>7 market participants</strong> (algos, desks, market makers,
         bond desks, economists, retail, options), and
         <strong>8 market outcomes</strong> (hike odds, 2Y and 10Y
-        yields, S&P 500, Nasdaq, VIX, the dollar, gold). Edges are
+        yields, S&amp;P 500, Nasdaq, VIX, the dollar, gold). Edges are
         information-flow links, weighted by how fast the channel carries news.
       </p>
       <p>
         The rings let you see where the repricing is: gold rings start it,
         teal rings transmit it, purple rings trade on it, green rings are
         the prices that move. A green node lighting up means the market
-        moved — the chips below the graph read out each move as it happens.
+        moved — the chips below the graph read out each move as it happens,
+        marked against what really happened.
       </p>
     </div>
   </section>
@@ -153,5 +196,24 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="script.js"></script>
+<script>
+/* Reality timeline: light each beat in turn, hold, loop. */
+(function () {
+  const steps = Array.from(document.querySelectorAll("#rt .rt-step"));
+  if (!steps.length) return;
+  let i = 0;
+  function cycle() {
+    steps.forEach(s => s.classList.remove("lit"));
+    if (i < steps.length) {
+      steps[i].classList.add("lit");
+      i++;
+      setTimeout(cycle, 1500);
+    } else {
+      setTimeout(() => { i = 0; cycle(); }, 2600);
+    }
+  }
+  cycle();
+})();
+</script>
 </body>
 </html>

@@ -91,9 +91,15 @@
     const reachCount=nonMarket.filter(n=>active.has(n.id)).length, marketCount=market.filter(n=>active.has(n.id)).length;
     el["bar-reach"].style.width=`${100*reachCount/nonMarket.length}%`; el["count-reach"].textContent=`${reachCount}/${nonMarket.length}`;
     el["bar-market"].style.width=`${100*marketCount/market.length}%`; el["count-market"].textContent=`${marketCount}/${market.length}`;
+    /* Verdicts vs reality: 7 of 8 market calls right; Nasdaq (16) barely moved. */
+    const VERDICT = {12:"hit",13:"hit",14:"hit",15:"hit",16:"miss",17:"hit",18:"hit",19:"hit"};
     el["market-strip"].replaceChildren(...market.filter(n=>active.has(n.id)).map(n=>{
       const chip=document.createElement("span"); chip.className="market-chip";
-      chip.textContent=n.impact||n.short; chip.title=n.label||n.short; return chip;
+      const v=VERDICT[n.id];
+      if(v) chip.classList.add(v==="hit"?"chip-hit":"chip-miss");
+      chip.textContent=n.impact||n.short; chip.title=n.label||n.short;
+      if(v){ const mark=document.createElement("span"); mark.className="chip-mark"; mark.textContent=v==="hit"?"✓":"✗"; chip.append(mark); }
+      return chip;
     }));
     el["step-num"].textContent=step; el["step-of"].textContent=`/ ${totalSteps()}`;
     el["timeline-range"].max=totalSteps(); el["timeline-range"].value=step;
