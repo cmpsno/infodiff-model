@@ -7,7 +7,7 @@
   const el = Object.fromEntries([
     "model-select","scenario-select","play-btn","back-btn","step-btn","reset-btn",
     "export-btn","speed-range","compare-toggle","timeline-range","step-num","step-of",
-    "bar-hi","bar-officer","count-hi","count-officer","story-line","eyebrow-model",
+    "bar-concept","bar-misconception","count-concept","count-misconception","story-line","eyebrow-model",
     "model-title","model-description","model-detail","footer-model","comparison-panel",
     "primary-label","comparison-label"
   ].map(id => [id, document.getElementById(id)]));
@@ -44,15 +44,15 @@
       .attr("stroke-width",d=>1+Math.min(4,(d.weight||1)-1));
     const groups = svg.append("g").selectAll("g").data(graph.nodes).join("g")
       .attr("class","node").attr("transform",d=>`translate(${positions.get(d.id).x},${positions.get(d.id).y})`);
-    groups.append("circle").attr("class",d=>`ring faction-${d.faction==="Hi"?"hi":"officer"}`)
+    groups.append("circle").attr("class",d=>`ring faction-${d.faction}`)
       .classed("seed",d=>s.seeds.includes(d.id)).attr("r",12);
     groups.append("circle").attr("class","fill").attr("r",8)
       .style("fill",d=>active.has(d.id)?color(activationTime(s,d.id)):null)
       .append("title").text(d => {
         const threshold = s.thresholds?.[String(d.id)];
-        return `Node ${d.id} · activated step ${activationTime(s,d.id)}${threshold===undefined?"":` · threshold ${threshold.toFixed(2)}`}`;
+        return `${d.label || ("Node " + d.id)} · mastered step ${activationTime(s,d.id)}${threshold===undefined?"":` · threshold ${threshold.toFixed(2)}`}`;
       });
-    groups.append("text").attr("dy",22).text(d=>d.id);
+    groups.append("text").attr("dy",22).text(d=>d.short||d.id);
     if (s.model==="linear_threshold" && s.thresholds) {
       groups.append("text").attr("class","threshold-label").attr("dy",-17)
         .text(d=>Number(s.thresholds[String(d.id)]).toFixed(2));
@@ -87,7 +87,7 @@
     drawChart(primary,other);
     const active=activeAt(primary,Math.min(step,primary.steps.length-1));
     const factions=d3.rollup(graph.nodes,v=>v.length,d=>d.faction);
-    for(const [faction,prefix] of [["Hi","hi"],["Officer","officer"]]){
+    for(const [faction,prefix] of [["concept","concept"],["misconception","misconception"]]){
       const count=graph.nodes.filter(n=>n.faction===faction&&active.has(n.id)).length, total=factions.get(faction)||graph.nodes.length;
       el[`bar-${prefix}`].style.width=`${100*count/total}%`; el[`count-${prefix}`].textContent=`${count}/${total}`;
     }
@@ -104,7 +104,7 @@
     key=options[0]; step=0; el["model-select"].value=model;
     el["eyebrow-model"].textContent=models[model].name.toLowerCase(); el["model-title"].textContent=models[model].name;
     el["model-description"].textContent=models[model].description;
-    el["model-detail"].textContent="Node color records activation time. Hover LT nodes to inspect thresholds; edge width reflects custom weights.";
+    el["model-detail"].textContent="Node color records the mastery step. Hover LT nodes to inspect thresholds; misconceptions carry higher thresholds than core concepts.";
     el["footer-model"].textContent=`${models[model].parameter} · ${graph.nodes.length} nodes, ${graph.links.length} edges`; render();
   }
   el["model-select"].replaceChildren(...modelKeys.map(k=>new Option(models[k].name,k)));
@@ -119,7 +119,7 @@
     const clone=document.getElementById("network").cloneNode(true);
     clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
     const style=document.createElementNS("http://www.w3.org/2000/svg","style");
-    style.textContent=".link{stroke:#c7cbbd;stroke-width:1.2}.link.pulsed{stroke:#c08a25}.ring{fill:none;stroke-width:2.4}.faction-hi{stroke:#a83b2e}.faction-officer{stroke:#1f5d63}.seed{stroke-width:3.4}.node text{font:9px monospace;fill:#656b60;text-anchor:middle}.threshold-label{font-size:8px;fill:#1b1f1c}";
+    style.textContent=".link{stroke:#c7cbbd;stroke-width:1.2}.link.pulsed{stroke:#c08a25}.ring{fill:none;stroke-width:2.4}.faction-misconception{stroke:#a83b2e}.faction-concept{stroke:#1f5d63}.seed{stroke-width:3.4}.node text{font:9px monospace;fill:#656b60;text-anchor:middle}.threshold-label{font-size:8px;fill:#1b1f1c}";
     clone.prepend(style);
     const source=new XMLSerializer().serializeToString(clone);
     const image=new Image(), blob=new Blob([source],{type:"image/svg+xml;charset=utf-8"}), url=URL.createObjectURL(blob);

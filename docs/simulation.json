@@ -1,593 +1,161 @@
 {
   "model": "multiple",
-  "graph_source": "karate",
+  "graph_source": "fourier",
   "models": {
     "independent_cascade": {
       "name": "Independent Cascade",
       "short_name": "IC",
       "parameter": "configurable p",
-      "description": "Newly active nodes get one chance to activate each neighbor."
+      "description": "A newly mastered concept gets one chance to unlock each related concept \u2014 the 'aha' spreading."
     },
     "linear_threshold": {
       "name": "Linear Threshold",
       "short_name": "LT",
-      "parameter": "uniform thresholds",
-      "description": "Nodes adopt when normalized active-neighbor influence reaches their threshold."
+      "parameter": "custom thresholds",
+      "description": "A concept is mastered once enough of its neighbors are mastered \u2014 reinforcement."
     }
   },
   "graph": {
     "nodes": [
       {
         "id": 0,
-        "faction": "Hi",
-        "degree": 16
+        "faction": "concept",
+        "degree": 6,
+        "label": "Frequency \u2014 cycles per second",
+        "short": "freq"
       },
       {
         "id": 1,
-        "faction": "Hi",
-        "degree": 9
+        "faction": "concept",
+        "degree": 2,
+        "label": "Amplitude \u2014 wave height",
+        "short": "amp"
       },
       {
         "id": 2,
-        "faction": "Hi",
-        "degree": 10
+        "faction": "concept",
+        "degree": 2,
+        "label": "Phase \u2014 where the cycle starts",
+        "short": "phase"
       },
       {
         "id": 3,
-        "faction": "Hi",
-        "degree": 6
+        "faction": "concept",
+        "degree": 5,
+        "label": "Superposition \u2014 waves add point by point",
+        "short": "superpos."
       },
       {
         "id": 4,
-        "faction": "Hi",
-        "degree": 3
+        "faction": "concept",
+        "degree": 3,
+        "label": "Spectrum \u2014 which frequencies a wave contains",
+        "short": "spectrum"
       },
       {
         "id": 5,
-        "faction": "Hi",
-        "degree": 4
+        "faction": "misconception",
+        "degree": 2,
+        "label": "M1 \u00b7 faster wiggle = taller wave",
+        "short": "M1"
       },
       {
         "id": 6,
-        "faction": "Hi",
-        "degree": 4
+        "faction": "misconception",
+        "degree": 2,
+        "label": "M2 \u00b7 adding waves adds their frequencies",
+        "short": "M2"
       },
       {
         "id": 7,
-        "faction": "Hi",
-        "degree": 4
+        "faction": "misconception",
+        "degree": 2,
+        "label": "M3 \u00b7 phase shift changes pitch",
+        "short": "M3"
       },
       {
         "id": 8,
-        "faction": "Hi",
-        "degree": 5
-      },
-      {
-        "id": 9,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 10,
-        "faction": "Hi",
-        "degree": 3
-      },
-      {
-        "id": 11,
-        "faction": "Hi",
-        "degree": 1
-      },
-      {
-        "id": 12,
-        "faction": "Hi",
-        "degree": 2
-      },
-      {
-        "id": 13,
-        "faction": "Hi",
-        "degree": 5
-      },
-      {
-        "id": 14,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 15,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 16,
-        "faction": "Hi",
-        "degree": 2
-      },
-      {
-        "id": 17,
-        "faction": "Hi",
-        "degree": 2
-      },
-      {
-        "id": 18,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 19,
-        "faction": "Hi",
-        "degree": 3
-      },
-      {
-        "id": 20,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 21,
-        "faction": "Hi",
-        "degree": 2
-      },
-      {
-        "id": 22,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 23,
-        "faction": "Officer",
-        "degree": 5
-      },
-      {
-        "id": 24,
-        "faction": "Officer",
-        "degree": 3
-      },
-      {
-        "id": 25,
-        "faction": "Officer",
-        "degree": 3
-      },
-      {
-        "id": 26,
-        "faction": "Officer",
-        "degree": 2
-      },
-      {
-        "id": 27,
-        "faction": "Officer",
-        "degree": 4
-      },
-      {
-        "id": 28,
-        "faction": "Officer",
-        "degree": 3
-      },
-      {
-        "id": 29,
-        "faction": "Officer",
-        "degree": 4
-      },
-      {
-        "id": 30,
-        "faction": "Officer",
-        "degree": 4
-      },
-      {
-        "id": 31,
-        "faction": "Officer",
-        "degree": 6
-      },
-      {
-        "id": 32,
-        "faction": "Officer",
-        "degree": 12
-      },
-      {
-        "id": 33,
-        "faction": "Officer",
-        "degree": 17
+        "faction": "misconception",
+        "degree": 2,
+        "label": "M4 \u00b7 a square wave is one frequency",
+        "short": "M4"
       }
     ],
     "links": [
       {
         "source": 0,
-        "target": 1,
-        "weight": 4.0
+        "target": 5,
+        "weight": 1.0
       },
       {
         "source": 0,
-        "target": 2,
-        "weight": 5.0
+        "target": 6,
+        "weight": 1.0
+      },
+      {
+        "source": 0,
+        "target": 7,
+        "weight": 1.0
       },
       {
         "source": 0,
         "target": 3,
-        "weight": 3.0
+        "weight": 1.0
+      },
+      {
+        "source": 0,
+        "target": 2,
+        "weight": 1.0
       },
       {
         "source": 0,
         "target": 4,
-        "weight": 3.0
+        "weight": 1.0
       },
       {
-        "source": 0,
+        "source": 1,
         "target": 5,
-        "weight": 3.0
-      },
-      {
-        "source": 0,
-        "target": 6,
-        "weight": 3.0
-      },
-      {
-        "source": 0,
-        "target": 7,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 8,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 10,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 11,
-        "weight": 3.0
-      },
-      {
-        "source": 0,
-        "target": 12,
         "weight": 1.0
-      },
-      {
-        "source": 0,
-        "target": 13,
-        "weight": 3.0
-      },
-      {
-        "source": 0,
-        "target": 17,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 19,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 21,
-        "weight": 2.0
-      },
-      {
-        "source": 0,
-        "target": 31,
-        "weight": 2.0
-      },
-      {
-        "source": 1,
-        "target": 2,
-        "weight": 6.0
       },
       {
         "source": 1,
         "target": 3,
-        "weight": 3.0
-      },
-      {
-        "source": 1,
-        "target": 7,
-        "weight": 4.0
-      },
-      {
-        "source": 1,
-        "target": 13,
-        "weight": 5.0
-      },
-      {
-        "source": 1,
-        "target": 17,
         "weight": 1.0
       },
       {
-        "source": 1,
-        "target": 19,
-        "weight": 2.0
-      },
-      {
-        "source": 1,
-        "target": 21,
-        "weight": 2.0
-      },
-      {
-        "source": 1,
-        "target": 30,
-        "weight": 2.0
-      },
-      {
-        "source": 2,
-        "target": 3,
-        "weight": 3.0
-      },
-      {
         "source": 2,
         "target": 7,
-        "weight": 4.0
+        "weight": 1.0
       },
       {
-        "source": 2,
+        "source": 3,
+        "target": 6,
+        "weight": 1.0
+      },
+      {
+        "source": 3,
         "target": 8,
-        "weight": 5.0
-      },
-      {
-        "source": 2,
-        "target": 9,
         "weight": 1.0
       },
       {
-        "source": 2,
-        "target": 13,
-        "weight": 3.0
-      },
-      {
-        "source": 2,
-        "target": 27,
-        "weight": 2.0
-      },
-      {
-        "source": 2,
-        "target": 28,
-        "weight": 2.0
-      },
-      {
-        "source": 2,
-        "target": 32,
-        "weight": 2.0
-      },
-      {
         "source": 3,
-        "target": 7,
-        "weight": 3.0
-      },
-      {
-        "source": 3,
-        "target": 12,
-        "weight": 3.0
-      },
-      {
-        "source": 3,
-        "target": 13,
-        "weight": 3.0
+        "target": 4,
+        "weight": 1.0
       },
       {
         "source": 4,
-        "target": 6,
-        "weight": 2.0
-      },
-      {
-        "source": 4,
-        "target": 10,
-        "weight": 3.0
-      },
-      {
-        "source": 5,
-        "target": 6,
-        "weight": 5.0
-      },
-      {
-        "source": 5,
-        "target": 10,
-        "weight": 3.0
-      },
-      {
-        "source": 5,
-        "target": 16,
-        "weight": 3.0
-      },
-      {
-        "source": 6,
-        "target": 16,
-        "weight": 3.0
-      },
-      {
-        "source": 8,
-        "target": 30,
-        "weight": 3.0
-      },
-      {
-        "source": 8,
-        "target": 32,
-        "weight": 3.0
-      },
-      {
-        "source": 8,
-        "target": 33,
-        "weight": 4.0
-      },
-      {
-        "source": 9,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 13,
-        "target": 33,
-        "weight": 3.0
-      },
-      {
-        "source": 14,
-        "target": 32,
-        "weight": 3.0
-      },
-      {
-        "source": 14,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 15,
-        "target": 32,
-        "weight": 3.0
-      },
-      {
-        "source": 15,
-        "target": 33,
-        "weight": 4.0
-      },
-      {
-        "source": 18,
-        "target": 32,
+        "target": 8,
         "weight": 1.0
-      },
-      {
-        "source": 18,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 19,
-        "target": 33,
-        "weight": 1.0
-      },
-      {
-        "source": 20,
-        "target": 32,
-        "weight": 3.0
-      },
-      {
-        "source": 20,
-        "target": 33,
-        "weight": 1.0
-      },
-      {
-        "source": 22,
-        "target": 32,
-        "weight": 2.0
-      },
-      {
-        "source": 22,
-        "target": 33,
-        "weight": 3.0
-      },
-      {
-        "source": 23,
-        "target": 25,
-        "weight": 5.0
-      },
-      {
-        "source": 23,
-        "target": 27,
-        "weight": 4.0
-      },
-      {
-        "source": 23,
-        "target": 29,
-        "weight": 3.0
-      },
-      {
-        "source": 23,
-        "target": 32,
-        "weight": 5.0
-      },
-      {
-        "source": 23,
-        "target": 33,
-        "weight": 4.0
-      },
-      {
-        "source": 24,
-        "target": 25,
-        "weight": 2.0
-      },
-      {
-        "source": 24,
-        "target": 27,
-        "weight": 3.0
-      },
-      {
-        "source": 24,
-        "target": 31,
-        "weight": 2.0
-      },
-      {
-        "source": 25,
-        "target": 31,
-        "weight": 7.0
-      },
-      {
-        "source": 26,
-        "target": 29,
-        "weight": 4.0
-      },
-      {
-        "source": 26,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 27,
-        "target": 33,
-        "weight": 4.0
-      },
-      {
-        "source": 28,
-        "target": 31,
-        "weight": 2.0
-      },
-      {
-        "source": 28,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 29,
-        "target": 32,
-        "weight": 4.0
-      },
-      {
-        "source": 29,
-        "target": 33,
-        "weight": 2.0
-      },
-      {
-        "source": 30,
-        "target": 32,
-        "weight": 3.0
-      },
-      {
-        "source": 30,
-        "target": 33,
-        "weight": 3.0
-      },
-      {
-        "source": 31,
-        "target": 32,
-        "weight": 4.0
-      },
-      {
-        "source": 31,
-        "target": 33,
-        "weight": 4.0
-      },
-      {
-        "source": 32,
-        "target": 33,
-        "weight": 5.0
       }
     ]
   },
   "scenarios": {
-    "hub": {
+    "frequency_first": {
       "model": "independent_cascade",
-      "name": "Start at the hub (Officer, node 33)",
-      "story": "The rumor starts with the single most-connected member of the club.",
+      "name": "Frequency clicks first",
+      "story": "The learner finally gets frequency. Phase and spectrum follow, then superposition \u2014 the misconceptions fall one by one, M1 last: it needs both frequency and amplitude.",
       "seeds": [
-        33
+        0
       ],
       "parameters": {
         "activation_probability": 0.2,
@@ -595,54 +163,31 @@
       },
       "steps": [
         [
-          33
+          0
         ],
         [
-          13,
-          14,
-          28
-        ],
-        [
-          3,
-          32
-        ],
-        [
-          2,
-          15,
-          23
-        ],
-        [
-          25
+          7,
+          3
         ]
       ],
       "activation_times": {
-        "33": 0,
-        "13": 1,
-        "14": 1,
-        "28": 1,
-        "3": 2,
-        "32": 2,
-        "2": 3,
-        "15": 3,
-        "23": 3,
-        "25": 4
+        "0": 0,
+        "7": 1,
+        "3": 1
       },
       "cumulative_reach": [
         1,
-        4,
-        6,
-        9,
-        10
+        3
       ],
-      "total_reached": 10,
-      "total_nodes": 34
+      "total_reached": 3,
+      "total_nodes": 9
     },
-    "leader_hi": {
+    "superposition_clicks": {
       "model": "independent_cascade",
-      "name": "Start with the instructor (Mr. Hi, node 0)",
-      "story": "Same idea, seeded from the rival hub on the other side of the eventual split.",
+      "name": "Superposition clicks",
+      "story": "Superposition pulls in amplitude and spectrum, then frequency \u2014 the misconceptions resolve in a burst, M3 last: it waits on phase.",
       "seeds": [
-        0
+        3
       ],
       "parameters": {
         "activation_probability": 0.2,
@@ -650,59 +195,29 @@
       },
       "steps": [
         [
-          0
+          3
         ],
         [
-          1,
-          10,
-          11,
-          19
-        ],
-        [
-          13,
-          17
-        ],
-        [
-          2
-        ],
-        [
-          32
-        ],
-        [
-          18,
-          23
+          6
         ]
       ],
       "activation_times": {
-        "0": 0,
-        "1": 1,
-        "10": 1,
-        "11": 1,
-        "19": 1,
-        "13": 2,
-        "17": 2,
-        "2": 3,
-        "32": 4,
-        "18": 5,
-        "23": 5
+        "3": 0,
+        "6": 1
       },
       "cumulative_reach": [
         1,
-        5,
-        7,
-        8,
-        9,
-        11
+        2
       ],
-      "total_reached": 11,
-      "total_nodes": 34
+      "total_reached": 2,
+      "total_nodes": 9
     },
-    "peripheral": {
+    "misconception_first": {
       "model": "independent_cascade",
-      "name": "Start at the edge (node 11, 1 connection)",
-      "story": "Seeded from the network's only degree-1 member \u2014 most cascades stall almost immediately.",
+      "name": "Confront M1 head-on",
+      "story": "Attacking M1 ('faster = taller') directly teaches amplitude \u2014 then stalls. One misconception can't seed a curriculum.",
       "seeds": [
-        11
+        5
       ],
       "parameters": {
         "activation_probability": 0.2,
@@ -710,35 +225,30 @@
       },
       "steps": [
         [
-          11
+          5
         ],
         [
           0
-        ],
-        [
-          17
         ]
       ],
       "activation_times": {
-        "11": 0,
-        "0": 1,
-        "17": 2
+        "5": 0,
+        "0": 1
       },
       "cumulative_reach": [
         1,
-        2,
-        3
+        2
       ],
-      "total_reached": 3,
-      "total_nodes": 34
+      "total_reached": 2,
+      "total_nodes": 9
     },
-    "dual": {
+    "core_pair": {
       "model": "independent_cascade",
-      "name": "Start in both factions at once (nodes 0 and 33)",
-      "story": "Both future factions hear the rumor independently on the same day.",
+      "name": "Frequency + amplitude together",
+      "story": "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more.",
       "seeds": [
         0,
-        33
+        1
       ],
       "parameters": {
         "activation_probability": 0.2,
@@ -747,212 +257,34 @@
       "steps": [
         [
           0,
-          33
-        ],
-        [
-          7,
-          13,
-          8,
-          19,
-          23,
-          27,
-          28
-        ],
-        [
-          29,
-          32,
-          2
-        ],
-        [
-          26,
-          3
-        ],
-        [
           1
         ],
         [
-          21
+          5
         ]
       ],
       "activation_times": {
         "0": 0,
-        "33": 0,
-        "7": 1,
-        "13": 1,
-        "8": 1,
-        "19": 1,
-        "23": 1,
-        "27": 1,
-        "28": 1,
-        "29": 2,
-        "32": 2,
-        "2": 2,
-        "26": 3,
-        "3": 3,
-        "1": 4,
-        "21": 5
+        "1": 0,
+        "5": 1
       },
       "cumulative_reach": [
         2,
-        9,
-        12,
-        14,
-        15,
-        16
+        3
       ],
-      "total_reached": 16,
-      "total_nodes": 34
+      "total_reached": 3,
+      "total_nodes": 9
     },
-    "lt_hub": {
+    "lt_frequency_first": {
       "model": "linear_threshold",
-      "name": "Start at the hub (Officer, node 33)",
-      "story": "The rumor starts with the single most-connected member of the club.",
-      "seeds": [
-        33
-      ],
-      "parameters": {
-        "influence": "normalized_edge_weight",
-        "threshold_distribution": "uniform",
-        "threshold_parameters": {
-          "low": 0.1,
-          "high": 0.5
-        },
-        "threshold_seed": 152
-      },
-      "steps": [
-        [
-          33
-        ],
-        [
-          8,
-          9,
-          14,
-          15,
-          18,
-          20,
-          22,
-          28,
-          29,
-          30,
-          31
-        ],
-        [
-          2,
-          25,
-          26,
-          32
-        ],
-        [
-          1,
-          23,
-          24
-        ],
-        [
-          7,
-          13,
-          17,
-          19,
-          21,
-          27
-        ],
-        [
-          0,
-          3
-        ],
-        [
-          11,
-          12
-        ]
-      ],
-      "activation_times": {
-        "33": 0,
-        "8": 1,
-        "9": 1,
-        "14": 1,
-        "15": 1,
-        "18": 1,
-        "20": 1,
-        "22": 1,
-        "28": 1,
-        "29": 1,
-        "30": 1,
-        "31": 1,
-        "2": 2,
-        "25": 2,
-        "26": 2,
-        "32": 2,
-        "1": 3,
-        "23": 3,
-        "24": 3,
-        "7": 4,
-        "13": 4,
-        "17": 4,
-        "19": 4,
-        "21": 4,
-        "27": 4,
-        "0": 5,
-        "3": 5,
-        "11": 6,
-        "12": 6
-      },
-      "cumulative_reach": [
-        1,
-        12,
-        16,
-        19,
-        25,
-        27,
-        29
-      ],
-      "total_reached": 29,
-      "total_nodes": 34,
-      "thresholds": {
-        "0": 0.49106132911531164,
-        "1": 0.2565801967012238,
-        "2": 0.15847257787554714,
-        "3": 0.48864213585906613,
-        "4": 0.4193515362931074,
-        "5": 0.34986899798302096,
-        "6": 0.46135826743632014,
-        "7": 0.3504961732486125,
-        "8": 0.11035373611919735,
-        "9": 0.40393845883335455,
-        "10": 0.34110376292286204,
-        "11": 0.4448902233171368,
-        "12": 0.1984080103205876,
-        "13": 0.49073131154675154,
-        "14": 0.3892210783703903,
-        "15": 0.21782919370486745,
-        "16": 0.3184368270932694,
-        "17": 0.11300326170963593,
-        "18": 0.22134162067380225,
-        "19": 0.40085342456572837,
-        "20": 0.22932954865518584,
-        "21": 0.23030833085038918,
-        "22": 0.47421040599008457,
-        "23": 0.46565709862672633,
-        "24": 0.3720625039372216,
-        "25": 0.27439503977803137,
-        "26": 0.4284223410462803,
-        "27": 0.47363661524815526,
-        "28": 0.13558958205738048,
-        "29": 0.1491730802060398,
-        "30": 0.12647021965333693,
-        "31": 0.17318873522475425,
-        "32": 0.27391921284386667,
-        "33": 0.2405455630927445
-      }
-    },
-    "lt_leader_hi": {
-      "model": "linear_threshold",
-      "name": "Start with the instructor (Mr. Hi, node 0)",
-      "story": "Same idea, seeded from the rival hub on the other side of the eventual split.",
+      "name": "Frequency clicks first",
+      "story": "The learner finally gets frequency. Phase and spectrum follow, then superposition \u2014 the misconceptions fall one by one, M1 last: it needs both frequency and amplitude.",
       "seeds": [
         0
       ],
       "parameters": {
         "influence": "normalized_edge_weight",
-        "threshold_distribution": "uniform",
+        "threshold_distribution": "custom",
         "threshold_parameters": {
           "low": 0.1,
           "high": 0.5
@@ -964,138 +296,64 @@
           0
         ],
         [
-          8,
-          11,
-          12,
-          17,
-          21
+          2,
+          4
         ],
         [
-          2,
-          30
+          3,
+          7
         ],
         [
           1,
-          3,
-          7,
-          28
+          6,
+          8
         ],
         [
-          13,
-          19,
-          31
-        ],
-        [
-          25,
-          32,
-          33
-        ],
-        [
-          9,
-          14,
-          15,
-          18,
-          20,
-          22,
-          23,
-          24,
-          29
-        ],
-        [
-          26,
-          27
+          5
         ]
       ],
       "activation_times": {
         "0": 0,
-        "8": 1,
-        "11": 1,
-        "12": 1,
-        "17": 1,
-        "21": 1,
-        "2": 2,
-        "30": 2,
+        "2": 1,
+        "4": 1,
+        "3": 2,
+        "7": 2,
         "1": 3,
-        "3": 3,
-        "7": 3,
-        "28": 3,
-        "13": 4,
-        "19": 4,
-        "31": 4,
-        "25": 5,
-        "32": 5,
-        "33": 5,
-        "9": 6,
-        "14": 6,
-        "15": 6,
-        "18": 6,
-        "20": 6,
-        "22": 6,
-        "23": 6,
-        "24": 6,
-        "29": 6,
-        "26": 7,
-        "27": 7
+        "6": 3,
+        "8": 3,
+        "5": 4
       },
       "cumulative_reach": [
         1,
-        6,
+        3,
+        5,
         8,
-        12,
-        15,
-        18,
-        27,
-        29
+        9
       ],
-      "total_reached": 29,
-      "total_nodes": 34,
+      "total_reached": 9,
+      "total_nodes": 9,
       "thresholds": {
-        "0": 0.49106132911531164,
-        "1": 0.2565801967012238,
-        "2": 0.15847257787554714,
-        "3": 0.48864213585906613,
-        "4": 0.4193515362931074,
-        "5": 0.34986899798302096,
-        "6": 0.46135826743632014,
-        "7": 0.3504961732486125,
-        "8": 0.11035373611919735,
-        "9": 0.40393845883335455,
-        "10": 0.34110376292286204,
-        "11": 0.4448902233171368,
-        "12": 0.1984080103205876,
-        "13": 0.49073131154675154,
-        "14": 0.3892210783703903,
-        "15": 0.21782919370486745,
-        "16": 0.3184368270932694,
-        "17": 0.11300326170963593,
-        "18": 0.22134162067380225,
-        "19": 0.40085342456572837,
-        "20": 0.22932954865518584,
-        "21": 0.23030833085038918,
-        "22": 0.47421040599008457,
-        "23": 0.46565709862672633,
-        "24": 0.3720625039372216,
-        "25": 0.27439503977803137,
-        "26": 0.4284223410462803,
-        "27": 0.47363661524815526,
-        "28": 0.13558958205738048,
-        "29": 0.1491730802060398,
-        "30": 0.12647021965333693,
-        "31": 0.17318873522475425,
-        "32": 0.27391921284386667,
-        "33": 0.2405455630927445
+        "0": 0.3,
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.3,
+        "4": 0.3,
+        "5": 0.55,
+        "6": 0.55,
+        "7": 0.55,
+        "8": 0.55
       }
     },
-    "lt_peripheral": {
+    "lt_superposition_clicks": {
       "model": "linear_threshold",
-      "name": "Start at the edge (node 11, 1 connection)",
-      "story": "Seeded from the network's only degree-1 member \u2014 most cascades stall almost immediately.",
+      "name": "Superposition clicks",
+      "story": "Superposition pulls in amplitude and spectrum, then frequency \u2014 the misconceptions resolve in a burst, M3 last: it waits on phase.",
       "seeds": [
-        11
+        3
       ],
       "parameters": {
         "influence": "normalized_edge_weight",
-        "threshold_distribution": "uniform",
+        "threshold_distribution": "custom",
         "threshold_parameters": {
           "low": 0.1,
           "high": 0.5
@@ -1104,65 +362,114 @@
       },
       "steps": [
         [
-          11
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          2,
+          5,
+          6
+        ],
+        [
+          7
         ]
       ],
       "activation_times": {
-        "11": 0
+        "3": 0,
+        "1": 1,
+        "4": 1,
+        "0": 2,
+        "8": 2,
+        "2": 3,
+        "5": 3,
+        "6": 3,
+        "7": 4
       },
       "cumulative_reach": [
-        1
+        1,
+        3,
+        5,
+        8,
+        9
       ],
-      "total_reached": 1,
-      "total_nodes": 34,
+      "total_reached": 9,
+      "total_nodes": 9,
       "thresholds": {
-        "0": 0.49106132911531164,
-        "1": 0.2565801967012238,
-        "2": 0.15847257787554714,
-        "3": 0.48864213585906613,
-        "4": 0.4193515362931074,
-        "5": 0.34986899798302096,
-        "6": 0.46135826743632014,
-        "7": 0.3504961732486125,
-        "8": 0.11035373611919735,
-        "9": 0.40393845883335455,
-        "10": 0.34110376292286204,
-        "11": 0.4448902233171368,
-        "12": 0.1984080103205876,
-        "13": 0.49073131154675154,
-        "14": 0.3892210783703903,
-        "15": 0.21782919370486745,
-        "16": 0.3184368270932694,
-        "17": 0.11300326170963593,
-        "18": 0.22134162067380225,
-        "19": 0.40085342456572837,
-        "20": 0.22932954865518584,
-        "21": 0.23030833085038918,
-        "22": 0.47421040599008457,
-        "23": 0.46565709862672633,
-        "24": 0.3720625039372216,
-        "25": 0.27439503977803137,
-        "26": 0.4284223410462803,
-        "27": 0.47363661524815526,
-        "28": 0.13558958205738048,
-        "29": 0.1491730802060398,
-        "30": 0.12647021965333693,
-        "31": 0.17318873522475425,
-        "32": 0.27391921284386667,
-        "33": 0.2405455630927445
+        "0": 0.3,
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.3,
+        "4": 0.3,
+        "5": 0.55,
+        "6": 0.55,
+        "7": 0.55,
+        "8": 0.55
       }
     },
-    "lt_dual": {
+    "lt_misconception_first": {
       "model": "linear_threshold",
-      "name": "Start in both factions at once (nodes 0 and 33)",
-      "story": "Both future factions hear the rumor independently on the same day.",
+      "name": "Confront M1 head-on",
+      "story": "Attacking M1 ('faster = taller') directly teaches amplitude \u2014 then stalls. One misconception can't seed a curriculum.",
       "seeds": [
-        0,
-        33
+        5
       ],
       "parameters": {
         "influence": "normalized_edge_weight",
-        "threshold_distribution": "uniform",
+        "threshold_distribution": "custom",
+        "threshold_parameters": {
+          "low": 0.1,
+          "high": 0.5
+        },
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          5
+        ],
+        [
+          1
+        ]
+      ],
+      "activation_times": {
+        "5": 0,
+        "1": 1
+      },
+      "cumulative_reach": [
+        1,
+        2
+      ],
+      "total_reached": 2,
+      "total_nodes": 9,
+      "thresholds": {
+        "0": 0.3,
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.3,
+        "4": 0.3,
+        "5": 0.55,
+        "6": 0.55,
+        "7": 0.55,
+        "8": 0.55
+      }
+    },
+    "lt_core_pair": {
+      "model": "linear_threshold",
+      "name": "Frequency + amplitude together",
+      "story": "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more.",
+      "seeds": [
+        0,
+        1
+      ],
+      "parameters": {
+        "influence": "normalized_edge_weight",
+        "threshold_distribution": "custom",
         "threshold_parameters": {
           "low": 0.1,
           "high": 0.5
@@ -1172,119 +479,48 @@
       "steps": [
         [
           0,
-          33
+          1
         ],
         [
-          8,
-          9,
-          11,
-          12,
-          14,
-          15,
-          17,
-          18,
-          19,
-          20,
-          21,
-          22,
-          28,
-          29,
-          30,
-          31
-        ],
-        [
-          1,
           2,
-          25,
-          26,
-          32
-        ],
-        [
           3,
-          7,
-          13,
-          23,
-          24
+          4,
+          5
         ],
         [
-          27
+          6,
+          7,
+          8
         ]
       ],
       "activation_times": {
         "0": 0,
-        "33": 0,
-        "8": 1,
-        "9": 1,
-        "11": 1,
-        "12": 1,
-        "14": 1,
-        "15": 1,
-        "17": 1,
-        "18": 1,
-        "19": 1,
-        "20": 1,
-        "21": 1,
-        "22": 1,
-        "28": 1,
-        "29": 1,
-        "30": 1,
-        "31": 1,
-        "1": 2,
-        "2": 2,
-        "25": 2,
-        "26": 2,
-        "32": 2,
-        "3": 3,
-        "7": 3,
-        "13": 3,
-        "23": 3,
-        "24": 3,
-        "27": 4
+        "1": 0,
+        "2": 1,
+        "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 2,
+        "7": 2,
+        "8": 2
       },
       "cumulative_reach": [
         2,
-        18,
-        23,
-        28,
-        29
+        6,
+        9
       ],
-      "total_reached": 29,
-      "total_nodes": 34,
+      "total_reached": 9,
+      "total_nodes": 9,
       "thresholds": {
-        "0": 0.49106132911531164,
-        "1": 0.2565801967012238,
-        "2": 0.15847257787554714,
-        "3": 0.48864213585906613,
-        "4": 0.4193515362931074,
-        "5": 0.34986899798302096,
-        "6": 0.46135826743632014,
-        "7": 0.3504961732486125,
-        "8": 0.11035373611919735,
-        "9": 0.40393845883335455,
-        "10": 0.34110376292286204,
-        "11": 0.4448902233171368,
-        "12": 0.1984080103205876,
-        "13": 0.49073131154675154,
-        "14": 0.3892210783703903,
-        "15": 0.21782919370486745,
-        "16": 0.3184368270932694,
-        "17": 0.11300326170963593,
-        "18": 0.22134162067380225,
-        "19": 0.40085342456572837,
-        "20": 0.22932954865518584,
-        "21": 0.23030833085038918,
-        "22": 0.47421040599008457,
-        "23": 0.46565709862672633,
-        "24": 0.3720625039372216,
-        "25": 0.27439503977803137,
-        "26": 0.4284223410462803,
-        "27": 0.47363661524815526,
-        "28": 0.13558958205738048,
-        "29": 0.1491730802060398,
-        "30": 0.12647021965333693,
-        "31": 0.17318873522475425,
-        "32": 0.27391921284386667,
-        "33": 0.2405455630927445
+        "0": 0.3,
+        "1": 0.3,
+        "2": 0.3,
+        "3": 0.3,
+        "4": 0.3,
+        "5": 0.55,
+        "6": 0.55,
+        "7": 0.55,
+        "8": 0.55
       }
     }
   }

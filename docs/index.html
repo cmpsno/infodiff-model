@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Information Diffusion Models on Zachary's Karate Club</title>
-<meta name="description" content="Compare Independent Cascade and Linear Threshold information diffusion, animated over Zachary's Karate Club — the real 1977 social network famous for splitting into two rival factions." />
+<title>How understanding spreads through a concept graph</title>
+<meta name="description" content="Two classic diffusion models repurposed as a learner model: watch an 'aha' spread across a Fourier concept graph under Independent Cascade and Linear Threshold dynamics." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,15 +18,15 @@
       <span class="dot-hi"></span><span class="dot-officer"></span>
       infodiff-model · <span id="eyebrow-model">independent cascade</span>
     </div>
-    <h1>How does a rumor<br /><em>move through a room</em>?</h1>
+    <h1>How does an "aha"<br /><em>spread through a mind</em>?</h1>
     <p class="dek">
-      Compare two classic ways information can spread: a one-shot
-      <strong>Independent Cascade</strong> and a socially reinforced
-      <strong>Linear Threshold</strong> model, both running on
-      <strong>Zachary's Karate Club</strong>, a real 34-person social network
-      from 1977 that famously fractured into two rival factions after a
-      dispute between its instructor and its president. Pick where a piece
-      of information starts, then watch who hears it, and when.
+      Two classic diffusion models, repurposed as a <strong>learner model</strong>:
+      a one-shot <strong>Independent Cascade</strong> ("aha" moments jumping
+      between ideas) and a socially reinforced <strong>Linear Threshold</strong>
+      model (a concept mastered once enough of its neighbors are), both running
+      on a <strong>Fourier concept graph</strong> — five core concepts and four
+      documented misconceptions (M1–M4) from an adaptive tutor's taxonomy.
+      Pick where understanding starts, then watch what it unlocks, and when.
     </p>
   </header>
 
@@ -72,34 +72,34 @@
         </div>
         <div class="faction-split">
           <div class="faction-row">
-            <span class="swatch hi"></span>
-            <span>Mr. Hi's circle</span>
-            <span class="bar-track"><span class="bar-fill hi" id="bar-hi" style="width:0%"></span></span>
-            <span class="count" id="count-hi">0/17</span>
+            <span class="swatch concept"></span>
+            <span>Core concepts</span>
+            <span class="bar-track"><span class="bar-fill concept" id="bar-concept" style="width:0%"></span></span>
+            <span class="count" id="count-concept">0/5</span>
           </div>
           <div class="faction-row">
-            <span class="swatch officer"></span>
-            <span>Officer's circle</span>
-            <span class="bar-track"><span class="bar-fill officer" id="bar-officer" style="width:0%"></span></span>
-            <span class="count" id="count-officer">0/17</span>
+            <span class="swatch misconception"></span>
+            <span>Misconceptions</span>
+            <span class="bar-track"><span class="bar-fill misconception" id="bar-misconception" style="width:0%"></span></span>
+            <span class="count" id="count-misconception">0/4</span>
           </div>
         </div>
         <p class="story-line" id="story-line"></p>
       </div>
 
       <div class="card">
-        <h2>Cumulative reach</h2>
+        <h2>Cumulative mastery</h2>
         <svg id="chart" viewBox="0 0 260 110"></svg>
       </div>
 
       <div class="card">
         <h2>Legend</h2>
         <div class="legend">
-          <div class="legend-item"><span class="legend-swatch ring-hi"></span> Ring: born into Mr. Hi's faction (1977 split)</div>
-          <div class="legend-item"><span class="legend-swatch ring-officer"></span> Ring: born into Officer's faction (1977 split)</div>
-          <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: reached by the cascade</div>
-          <div class="legend-item"><span class="activation-gradient"></span> Fill shade: activation time</div>
-          <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: not yet reached</div>
+          <div class="legend-item"><span class="legend-swatch ring-concept"></span> Ring: core concept</div>
+          <div class="legend-item"><span class="legend-swatch ring-misconception"></span> Ring: misconception (M1–M4)</div>
+          <div class="legend-item"><span class="legend-swatch fill-gold"></span> Fill: mastered / misconception resolved</div>
+          <div class="legend-item"><span class="activation-gradient"></span> Fill shade: mastery step</div>
+          <div class="legend-item"><span class="legend-swatch fill-empty"></span> Fill: not yet mastered</div>
         </div>
       </div>
     </aside>
@@ -112,26 +112,29 @@
       <p id="model-detail"></p>
     </div>
     <div>
-      <h3>The dataset</h3>
+      <h3>The concept graph</h3>
       <p>
-        Wayne Zachary studied a university karate club for three years,
-        mapping friendships between its 34 members. Partway through, a
-        conflict between the instructor ("Mr. Hi") and the club president
-        ("Officer") split the group in two — and Zachary showed the split
-        was largely predictable from the friendship network alone. It has
-        since become one of the most-used toy networks in graph theory.
+        The network is a hand-built concept graph for one learning domain:
+        Fourier / sine waves. Five <strong>core concepts</strong> (frequency,
+        amplitude, phase, superposition, spectrum) and four
+        <strong>misconceptions</strong> from an adaptive tutor's taxonomy —
+        M1 (faster wiggle = taller wave), M2 (adding waves adds their
+        frequencies), M3 (phase shift changes pitch), M4 (a square wave
+        contains one frequency). Edges are prerequisite links.
       </p>
       <p>
-        Here, that ground-truth split is repurposed as a lens on the
-        cascade: the faction rings let you see whether a rumor stays inside
-        one social circle or jumps the fracture line.
+        Here, the rings let you see whether understanding stays inside the
+        core concepts or jumps to the misconceptions: a misconception node
+        lighting up means it got <em>resolved</em>. Misconceptions carry
+        higher thresholds — they only resolve once most of their
+        prerequisites are mastered.
       </p>
     </div>
   </section>
 
   <footer>
-    <span id="footer-model">independent cascade · p = 0.2 · 34 nodes, 78 edges</span>
-    <span><a href="https://github.com/isaiahcampusano/infodiff-model">source on GitHub</a></span>
+    <span id="footer-model">independent cascade · p = 0.2 · 9 nodes, 13 edges</span>
+    <span><a href="https://github.com/cmpsno/infodiff-model">source on GitHub</a></span>
   </footer>
 
 </div>

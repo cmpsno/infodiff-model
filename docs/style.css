@@ -493,3 +493,13 @@ footer a { color: var(--muted); }
   }
   .viewport-grid { grid-template-columns: 1fr; }
 }
+
+/* Concept-graph semantics: teal rings = core concepts, red rings = misconceptions. */
+.node circle.ring.faction-concept { stroke: var(--officer); }
+.node circle.ring.faction-misconception { stroke: var(--hi); }
+.faction-row .swatch.concept { border-color: var(--officer); }
+.faction-row .swatch.misconception { border-color: var(--hi); }
+.faction-row .bar-fill.concept { background: var(--officer); }
+.faction-row .bar-fill.misconception { background: var(--hi); }
+.legend-swatch.ring-concept { border: 2.4px solid var(--officer); background: transparent; }
+.legend-swatch.ring-misconception { border: 2.4px solid var(--hi); background: transparent; }
