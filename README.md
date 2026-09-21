@@ -1,18 +1,20 @@
 # infodiff-model
 
 Two classic information-diffusion models — **Independent Cascade** and
-**Linear Threshold** — run on [Zachary's
-Karate Club](https://en.wikipedia.org/wiki/Zachary%27s_karate_club) — the
-real 34-member social network from a 1977 anthropology study, famous for
-splitting into two rival factions during the course of the study.
+**Linear Threshold** — repurposed as a **learner model**: how understanding
+spreads through a concept graph.
 
-The Python models compute how a rumor, idea, or product might spread
-node-by-node through that network under different starting conditions. The
-results are exported as JSON and played back frame-by-frame in a small
-interactive site on GitHub Pages.
+The default network is a hand-built **Fourier / sine-wave concept graph**:
+five core concepts (frequency, amplitude, phase, superposition, spectrum)
+and four documented misconceptions — M1 (faster wiggle = taller wave),
+M2 (adding waves adds their frequencies), M3 (phase shift changes pitch),
+M4 (a square wave contains one frequency) — wired by prerequisite links.
+The Python models compute how a breakthrough on one concept propagates
+node-by-node under different starting conditions. The results are exported
+as JSON and played back frame-by-frame in a small interactive site on
+GitHub Pages.
 
-**Live demo:** enable GitHub Pages for this repo (see below) and it will be
-served at `https://<your-username>.github.io/infodiff-model/`.
+**Live demo:** `https://cmpsno.github.io/infodiff-model/`
 
 ## How the models work
 
@@ -27,28 +29,35 @@ Linear Threshold). Starting from a seed set:
 2. A failed attempt is never retried on that edge.
 3. The cascade halts once a full round produces no new activations.
 
-The **Linear Threshold** model captures social reinforcement instead of
-one-shot transmission. Every inactive node has an individual threshold and
-activates once the share of its active neighbors meets that threshold. This
-implementation gives neighbors equal influence and samples reproducible
-thresholds from `0.1` to `0.5`. The same node thresholds are shared across
-all four LT scenarios, so changing the seed location is a fair comparison.
+On the concept graph, IC is the **"aha" model**: a newly mastered concept
+gets one shot at unlocking each related concept.
 
-The default dataset precomputes four starting conditions for both models. The
-site can show IC and LT side by side on a synchronized timeline, scrub in
-either direction, color nodes by activation time, expose LT thresholds, and
-export the current network frame as PNG.
+The **Linear Threshold** model captures reinforcement instead of one-shot
+transmission. Every inactive node has an individual threshold and activates
+once the share of its active neighbors meets that threshold. On the concept
+graph, LT is **mastery propagation**: a concept is mastered once enough of
+its prerequisites are, and misconceptions carry higher thresholds (0.55 vs
+0.3) — they only resolve once most of their prerequisites are mastered. The
+same node thresholds are shared across all four LT scenarios, so changing
+the seed location is a fair comparison.
+
+The default dataset precomputes four starting conditions for both models
+(frequency clicks first; superposition clicks; confront M1 head-on;
+frequency + amplitude together). The site can show IC and LT side by side
+on a synchronized timeline, scrub in either direction, color nodes by
+mastery step, expose LT thresholds, and export the current network frame
+as PNG.
 
 ## Repo structure
 
 ```
 infodiff-model/
 ├── model/
-│   ├── independent_cascade.py   # the diffusion model itself
-│   ├── linear_threshold.py      # social-reinforcement diffusion model
+│   ├── independent_cascade.py   # the diffusion model itself ("aha" spreading)
+│   ├── linear_threshold.py      # reinforcement diffusion model (mastery propagation)
 │   ├── generate_simulation.py   # builds the graph, runs all scenarios, writes JSON
 │   ├── configuration.py         # validated experiment configuration
-│   ├── graph_io.py              # graph files and built-in generators
+│   ├── graph_io.py              # graph files, built-in generators, fourier concept graph
 │   ├── batch_simulate.py        # repeated runs and statistical CSV summaries
 │   ├── example_config.json      # example sweep configuration
 │   ├── test_models.py           # model and generated-data contract tests
@@ -71,7 +80,13 @@ python3 generate_simulation.py
 ```
 
 This is deterministic: every scenario is driven by a fixed random seed.
-The default command preserves the original Karate Club experiment.
+The default command builds the Fourier concept-graph experiment.
+
+Run the classic Karate Club version instead:
+
+```bash
+python3 generate_simulation.py --graph karate --seeds 33
+```
 
 Run a parameter sweep on a generated graph:
 
@@ -86,7 +101,7 @@ Or use the supplied JSON configuration:
 python3 generate_simulation.py --config example_config.json
 ```
 
-Graph sources include `karate`, `erdos_renyi:n,p`,
+Graph sources include `fourier`, `karate`, `erdos_renyi:n,p`,
 `barabasi_albert:n,m`, `watts_strogatz:n,k,p`, and local `.csv`,
 `.edgelist`, `.gml`, `.graphml`, or Pajek `.net` files. Arbitrary
 file node labels are normalized to stable integer IDs, with the source labels
@@ -99,12 +114,12 @@ Repeated IC runs produce raw results and a summary with mean, median,
 variance, and a 95% normal-approximation confidence interval:
 
 ```bash
-python3 batch_simulate.py --graph karate --seeds 0 --p 0.1 0.2 0.3 \
-  --runs 100 --output-prefix results/karate
+python3 batch_simulate.py --graph fourier --seeds 0 --p 0.1 0.2 0.3 \
+  --runs 100 --output-prefix results/fourier
 ```
 
-This writes `results/karate_runs.csv` and
-`results/karate_summary.csv`.
+This writes `results/fourier_runs.csv` and
+`results/fourier_summary.csv`.
 
 ## Running the tests
 
@@ -114,7 +129,9 @@ python3 -m unittest -v
 ```
 
 The tests cover deterministic IC behavior, synchronous LT activation, result
-invariants, and the JSON playback contract shared by all generated scenarios.
+invariants, the Fourier concept-graph structure (including the exact
+`frequency-first` LT spread the site's story describes), and the JSON
+playback contract shared by all generated scenarios.
 
 ## Viewing the site locally
 
@@ -136,22 +153,23 @@ Then open `http://localhost:8000`.
    branch**.
 4. Set the branch to `main` and the folder to **`/docs`**, then save.
 5. GitHub will publish the site at
-   `https://<your-username>.github.io/infodiff-model/` within a minute or
+   `https://cmpsno.github.io/infodiff-model/` within a minute or
    two.
 
 ## Extending this
 
 Some natural next steps if you want to keep building:
 
-- Add an **SIR** or **SIS** model with state-aware playback.
-- Swap in a different network (any edge list works — the front end only
-  needs `graph.nodes` / `graph.links` in the same shape).
+- Add a second concept domain (softmax) as a new built-in graph — the
+  site renders any `graph.nodes` / `graph.links` payload in the same shape.
 - Make the front end fully interactive: run the cascade live in the
   browser instead of replaying precomputed steps, so visitors can click
-  any node to seed it.
+  any concept to seed it.
 - Track *which* edge caused each activation (rather than just which nodes
   activated) to animate individual "transmission" events along specific
   links.
+- Feed real learner data back in: fit per-node thresholds from observed
+  mastery sequences instead of hand-setting them.
 
 ## License
 
