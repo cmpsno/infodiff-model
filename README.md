@@ -1,15 +1,20 @@
 # infodiff-model
 
 Two classic information-diffusion models — **Independent Cascade** and
-**Linear Threshold** — running on a **rumor network**: how a Fed rate-cut
-rumor spreads from the FOMC through media and trading desks until it moves
-the stock market.
+**Linear Threshold** — running on a **rumor network**: how September
+2026's hot CPI print spread from the newswires through algos and trading
+desks until the market priced another Fed rate hike.
+
+On September 11, August CPI printed 3.4% (core 0.3% vs 0.2% expected);
+hike odds jumped to 85%. Five days later the Fed raised 25bp to
+3.75–4.00% — its first hike since 2023 — the dot plot pointed to one
+more this year, the 10Y closed at 5.006%, and gold fell to $4,310.
 
 The default network is a hand-built **rumor-market graph**: 2 rumor
-sources (the FOMC, a Fed speaker), 3 media channels (wires, social, TV),
+sources (the FOMC, Chair Warsh), 3 media channels (wires, social, TV),
 7 market participants (algos, institutional desks, market makers, bond
-desks, economists, retail, options), and 8 market outcomes (fed funds
-futures, 2Y and 10Y yields, S&P 500, Nasdaq, VIX, the dollar, gold) —
+desks, economists, retail, options), and 8 market outcomes (hike odds,
+2Y and 10Y yields, S&P 500, Nasdaq, VIX, the dollar, gold) —
 wired by weighted information-flow links. The Python models compute how
 the rumor propagates node-by-node under different starting conditions.
 The results are exported as JSON and played back frame-by-frame in a
@@ -43,8 +48,8 @@ node thresholds are shared across all four LT scenarios, so changing the
 seed location is a fair comparison.
 
 The default dataset precomputes four starting conditions for both models
-(the Fed cuts rates; a speaker hints at cuts; retail piles in first;
-wires and algos together). The site can show IC and LT side by side
+(a hot CPI print; the Fed hikes; Warsh doubles down; retail piles in
+late). The site can show IC and LT side by side
 on a synchronized timeline, scrub in either direction, color nodes by the
 step the rumor arrived, expose LT thresholds, read out each market move
 as it happens, and export the current network frame as PNG.
@@ -130,7 +135,7 @@ python3 -m unittest -v
 ```
 
 The tests cover deterministic IC behavior, synchronous LT activation, result
-invariants, the rumor-graph structure (including the exact `rate_cut` LT
+invariants, the rumor-graph structure (including the exact `fed_hike` LT
 spread the site's story describes), and the JSON playback contract shared
 by all generated scenarios.
 
