@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>How a rate-cut rumor moves the market</title>
-<meta name="description" content="Two classic diffusion models on a rumor network: watch a Fed rate-cut rumor spread from the FOMC through media and trading desks until it moves yields, equities, and gold." />
+<title>How a hot CPI print moves the market</title>
+<meta name="description" content="Two classic diffusion models on a rumor network: watch September 2026's hot CPI print spread from the newswires through algos and trading desks until the market prices another Fed rate hike." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,9 +18,9 @@
       <span class="dot-hi"></span><span class="dot-officer"></span>
       infodiff-model · <span id="eyebrow-model">independent cascade</span>
     </div>
-    <h1>Someone whispers &ldquo;rate cut.&rdquo; The whole market moves.</h1>
+    <h1>CPI came in hot. The market repriced the Fed in minutes.</h1>
     <p class="dek">
-      Watch a rumor spread from the Fed to gold.
+      Watch September's hot CPI print turn into another rate hike in the market's mind.
     </p>
   </header>
 
@@ -53,9 +53,9 @@
       <div class="network-panel"><h2 id="primary-label">Independent Cascade</h2>
         <svg id="network" viewBox="0 0 820 620" role="img" aria-label="Primary diffusion network"></svg>
         <div class="event-card" id="event-card" hidden>
-          <div class="event-kicker">BREAKING</div>
-          <div class="event-headline">FED CUTS RATES</div>
-          <div class="event-sub">a rumor starts at the FOMC</div>
+          <div class="event-kicker">SEPTEMBER 11, 2026</div>
+          <div class="event-headline">CPI HOT AT 3.4%</div>
+          <div class="event-sub">hike odds jump to 85%</div>
         </div>
       </div>
       <div class="network-panel" id="comparison-panel"><h2 id="comparison-label">Linear Threshold</h2>
@@ -115,22 +115,31 @@
       <p id="model-detail"></p>
     </div>
     <div>
-      <h3>The rumor network</h3>
+      <h3>The real event behind it</h3>
       <p>
-        The network is a hand-built map of how a rate-cut rumor travels:
-        <strong>2 rumor sources</strong> (the FOMC, a Fed speaker),
+        On <strong>September 11, 2026</strong>, August CPI printed
+        <strong>3.4%</strong> — with core at 0.3% against 0.2% expected.
+        Hike odds jumped to 85%. Five days later the Fed raised
+        <strong>25bp to 3.75–4.00%</strong>, its first hike since 2023, and
+        the dot plot pointed to one more this year. The 10Y closed at
+        5.006%, the S&P fell 0.45%, the dollar rose 0.7%, and gold tumbled
+        to $4,310.
+      </p>
+      <p>
+        The network is a hand-built map of how that repricing traveled:
+        <strong>2 rumor sources</strong> (the FOMC, Chair Warsh),
         <strong>3 media channels</strong> (wires, social, TV),
         <strong>7 market participants</strong> (algos, desks, market makers,
         bond desks, economists, retail, options), and
-        <strong>8 market outcomes</strong> (fed funds futures, 2Y and 10Y
+        <strong>8 market outcomes</strong> (hike odds, 2Y and 10Y
         yields, S&P 500, Nasdaq, VIX, the dollar, gold). Edges are
         information-flow links, weighted by how fast the channel carries news.
       </p>
       <p>
-        The rings let you see where the rumor is: gold rings start it, teal
-        rings transmit it, purple rings trade on it, green rings are the
-        prices that move. A green node lighting up means the market moved —
-        the chips below the graph read out each move as it happens.
+        The rings let you see where the repricing is: gold rings start it,
+        teal rings transmit it, purple rings trade on it, green rings are
+        the prices that move. A green node lighting up means the market
+        moved — the chips below the graph read out each move as it happens.
       </p>
     </div>
   </section>

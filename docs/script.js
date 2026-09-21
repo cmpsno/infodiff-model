@@ -132,7 +132,7 @@
       const a=document.createElement("a");a.download=`infodiff-${key}-step-${step}.png`;a.href=canvas.toDataURL("image/png");a.click();}; image.src=url;
   };
   loadModel(model);
-  /* Guided intro: the rumor's opening frame, then autoplay the rate-cut
+  /* Guided intro: the CPI print's opening frame, then autoplay the hot-CPI
      sequence on loop until the viewer takes over. */
   let autoplay = true, cardTimer;
   function showEventCard(){
@@ -146,7 +146,7 @@
   for (const id of ["play-btn","back-btn","step-btn","reset-btn","timeline-range","speed-range","model-select","scenario-select","compare-toggle","export-btn"]) {
     el[id].addEventListener("pointerdown", () => { autoplay = false; hideEventCard(); }, { capture: true });
   }
-  el["scenario-select"].value = "lt_rate_cut";
-  key = "lt_rate_cut";
+  el["scenario-select"].value = "lt_hot_cpi";
+  key = "lt_hot_cpi";
   startLoop();
 })();

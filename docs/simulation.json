@@ -21,14 +21,14 @@
         "id": 0,
         "faction": "source",
         "degree": 2,
-        "label": "FOMC statement \u2014 the Fed cuts rates",
+        "label": "FOMC \u2014 the Fed hikes 25bp to 3.75\u20134.00%",
         "short": "FOMC"
       },
       {
         "id": 1,
         "faction": "source",
         "degree": 2,
-        "label": "Fed speaker hints at cuts",
+        "label": "Chair Warsh: inflation 'too high for too long'",
         "short": "Speaker"
       },
       {
@@ -105,9 +105,9 @@
         "id": 12,
         "faction": "market",
         "degree": 3,
-        "label": "Fed funds futures",
-        "short": "FedFunds",
-        "impact": "futures price in 2 more cuts"
+        "label": "Hike odds for the next meeting (FedWatch)",
+        "short": "Odds",
+        "impact": "dot plot: one more hike this year"
       },
       {
         "id": 13,
@@ -115,7 +115,7 @@
         "degree": 4,
         "label": "2-year Treasury yield",
         "short": "2Y",
-        "impact": "2Y \u2212 24 bp"
+        "impact": "2Y 4.22% \u2192 4.30%"
       },
       {
         "id": 14,
@@ -123,7 +123,7 @@
         "degree": 4,
         "label": "10-year Treasury yield",
         "short": "10Y",
-        "impact": "10Y \u2212 11 bp"
+        "impact": "10Y closed 5.006%"
       },
       {
         "id": 15,
@@ -131,15 +131,15 @@
         "degree": 5,
         "label": "S&P 500",
         "short": "S&P",
-        "impact": "S&P 500 +1.8%"
+        "impact": "S&P 500 \u22120.45%"
       },
       {
         "id": 16,
         "faction": "market",
         "degree": 2,
-        "label": "Nasdaq 100",
+        "label": "Nasdaq Composite",
         "short": "Nasdaq",
-        "impact": "Nasdaq +2.4%"
+        "impact": "Nasdaq \u22120.01%"
       },
       {
         "id": 17,
@@ -147,7 +147,7 @@
         "degree": 2,
         "label": "VIX volatility index",
         "short": "VIX",
-        "impact": "VIX \u2212 3.2"
+        "impact": "VIX 17.71 (+3%)"
       },
       {
         "id": 18,
@@ -155,7 +155,7 @@
         "degree": 2,
         "label": "US dollar index",
         "short": "Dollar",
-        "impact": "dollar \u2212 0.6%"
+        "impact": "dollar +0.7%"
       },
       {
         "id": 19,
@@ -163,7 +163,7 @@
         "degree": 1,
         "label": "Gold",
         "short": "Gold",
-        "impact": "gold +1.1%"
+        "impact": "gold fell to $4,310"
       }
     ],
     "links": [
@@ -320,10 +320,35 @@
     ]
   },
   "scenarios": {
-    "rate_cut": {
+    "hot_cpi": {
       "model": "independent_cascade",
-      "name": "The Fed cuts rates",
-      "story": "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly \u2014 then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard.",
+      "name": "Hot CPI print",
+      "story": "September 11: August CPI prints 3.4% \u2014 core 0.3% against 0.2% expected. Wires flash it, hike odds jump to 85%, and the repricing runs through algos, desks and bonds into every market outcome.",
+      "seeds": [
+        2
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 5
+      },
+      "steps": [
+        [
+          2
+        ]
+      ],
+      "activation_times": {
+        "2": 0
+      },
+      "cumulative_reach": [
+        1
+      ],
+      "total_reached": 1,
+      "total_nodes": 20
+    },
+    "fed_hike": {
+      "model": "independent_cascade",
+      "name": "The Fed hikes",
+      "story": "September 16: the Fed raises 25bp to 3.75\u20134.00%, its first hike since 2023. The dot plot points to one more this year \u2014 futures, yields, equities and the dollar all move.",
       "seeds": [
         0
       ],
@@ -377,10 +402,10 @@
       "total_reached": 8,
       "total_nodes": 20
     },
-    "speaker_hint": {
+    "speaker_hawk": {
       "model": "independent_cascade",
-      "name": "A speaker hints at cuts",
-      "story": "One Fed speaker hints at cuts. Social runs with it and wires pick it up \u2014 but a hint is not a cut, and the move stalls before volatility or the dollar ever react.",
+      "name": "Warsh doubles down",
+      "story": "Chair Warsh: inflation has been 'too high for too long.' The press conference pushes yields and the dollar higher \u2014 and this time the move carries all the way to gold.",
       "seeds": [
         1
       ],
@@ -402,10 +427,10 @@
       "total_reached": 1,
       "total_nodes": 20
     },
-    "retail_fomo": {
+    "retail_panic": {
       "model": "independent_cascade",
-      "name": "Retail piles in first",
-      "story": "Retail piles into the rumor first. The noise travels backward \u2014 even the FOMC 'hears' it \u2014 but without institutional confirmation the bond market never fully buys in.",
+      "name": "Retail piles in late",
+      "story": "Retail piles in after the move \u2014 selling winners once half the repricing is done. The noise travels backward, even reaching the FOMC, and late as it is, it still reaches gold.",
       "seeds": [
         10
       ],
@@ -427,52 +452,115 @@
       "total_reached": 1,
       "total_nodes": 20
     },
-    "wire_algo": {
-      "model": "independent_cascade",
-      "name": "Wires and algos together",
-      "story": "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps.",
+    "lt_hot_cpi": {
+      "model": "linear_threshold",
+      "name": "Hot CPI print",
+      "story": "September 11: August CPI prints 3.4% \u2014 core 0.3% against 0.2% expected. Wires flash it, hike odds jump to 85%, and the repricing runs through algos, desks and bonds into every market outcome.",
       "seeds": [
-        2,
-        5
+        2
       ],
       "parameters": {
-        "activation_probability": 0.2,
-        "random_seed": 9
+        "influence": "normalized_edge_weight",
+        "threshold_distribution": "custom",
+        "threshold_parameters": {
+          "low": 0.1,
+          "high": 0.5
+        },
+        "threshold_seed": 152
       },
       "steps": [
         [
-          2,
-          5
+          2
         ],
         [
+          0,
+          1,
           3,
+          4,
+          5,
           6
         ],
         [
-          1,
-          9
+          7,
+          8,
+          9,
+          10,
+          12
+        ],
+        [
+          11,
+          13,
+          14,
+          15
+        ],
+        [
+          16,
+          17,
+          18
+        ],
+        [
+          19
         ]
       ],
       "activation_times": {
         "2": 0,
-        "5": 0,
+        "0": 1,
+        "1": 1,
         "3": 1,
+        "4": 1,
+        "5": 1,
         "6": 1,
-        "1": 2,
-        "9": 2
+        "7": 2,
+        "8": 2,
+        "9": 2,
+        "10": 2,
+        "12": 2,
+        "11": 3,
+        "13": 3,
+        "14": 3,
+        "15": 3,
+        "16": 4,
+        "17": 4,
+        "18": 4,
+        "19": 5
       },
       "cumulative_reach": [
-        2,
-        4,
-        6
+        1,
+        7,
+        12,
+        16,
+        19,
+        20
       ],
-      "total_reached": 6,
-      "total_nodes": 20
+      "total_reached": 20,
+      "total_nodes": 20,
+      "thresholds": {
+        "0": 0.25,
+        "1": 0.25,
+        "2": 0.2,
+        "3": 0.25,
+        "4": 0.3,
+        "5": 0.15,
+        "6": 0.25,
+        "7": 0.3,
+        "8": 0.25,
+        "9": 0.4,
+        "10": 0.55,
+        "11": 0.3,
+        "12": 0.25,
+        "13": 0.3,
+        "14": 0.35,
+        "15": 0.35,
+        "16": 0.35,
+        "17": 0.3,
+        "18": 0.4,
+        "19": 0.45
+      }
     },
-    "lt_rate_cut": {
+    "lt_fed_hike": {
       "model": "linear_threshold",
-      "name": "The Fed cuts rates",
-      "story": "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly \u2014 then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard.",
+      "name": "The Fed hikes",
+      "story": "September 16: the Fed raises 25bp to 3.75\u20134.00%, its first hike since 2023. The dot plot points to one more this year \u2014 futures, yields, equities and the dollar all move.",
       "seeds": [
         0
       ],
@@ -577,10 +665,10 @@
         "19": 0.45
       }
     },
-    "lt_speaker_hint": {
+    "lt_speaker_hawk": {
       "model": "linear_threshold",
-      "name": "A speaker hints at cuts",
-      "story": "One Fed speaker hints at cuts. Social runs with it and wires pick it up \u2014 but a hint is not a cut, and the move stalls before volatility or the dollar ever react.",
+      "name": "Warsh doubles down",
+      "story": "Chair Warsh: inflation has been 'too high for too long.' The press conference pushes yields and the dollar higher \u2014 and this time the move carries all the way to gold.",
       "seeds": [
         1
       ],
@@ -688,10 +776,10 @@
         "19": 0.45
       }
     },
-    "lt_retail_fomo": {
+    "lt_retail_panic": {
       "model": "linear_threshold",
-      "name": "Retail piles in first",
-      "story": "Retail piles into the rumor first. The noise travels backward \u2014 even the FOMC 'hears' it \u2014 but without institutional confirmation the bond market never fully buys in.",
+      "name": "Retail piles in late",
+      "story": "Retail piles in after the move \u2014 selling winners once half the repricing is done. The noise travels backward, even reaching the FOMC, and late as it is, it still reaches gold.",
       "seeds": [
         10
       ],
@@ -770,112 +858,6 @@
         8,
         12,
         15,
-        18,
-        19,
-        20
-      ],
-      "total_reached": 20,
-      "total_nodes": 20,
-      "thresholds": {
-        "0": 0.25,
-        "1": 0.25,
-        "2": 0.2,
-        "3": 0.25,
-        "4": 0.3,
-        "5": 0.15,
-        "6": 0.25,
-        "7": 0.3,
-        "8": 0.25,
-        "9": 0.4,
-        "10": 0.55,
-        "11": 0.3,
-        "12": 0.25,
-        "13": 0.3,
-        "14": 0.35,
-        "15": 0.35,
-        "16": 0.35,
-        "17": 0.3,
-        "18": 0.4,
-        "19": 0.45
-      }
-    },
-    "lt_wire_algo": {
-      "model": "linear_threshold",
-      "name": "Wires and algos together",
-      "story": "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps.",
-      "seeds": [
-        2,
-        5
-      ],
-      "parameters": {
-        "influence": "normalized_edge_weight",
-        "threshold_distribution": "custom",
-        "threshold_parameters": {
-          "low": 0.1,
-          "high": 0.5
-        },
-        "threshold_seed": 152
-      },
-      "steps": [
-        [
-          2,
-          5
-        ],
-        [
-          0,
-          1,
-          3,
-          4,
-          6,
-          7,
-          12
-        ],
-        [
-          8,
-          9,
-          10,
-          15
-        ],
-        [
-          11,
-          13,
-          14,
-          16,
-          17
-        ],
-        [
-          18
-        ],
-        [
-          19
-        ]
-      ],
-      "activation_times": {
-        "2": 0,
-        "5": 0,
-        "0": 1,
-        "1": 1,
-        "3": 1,
-        "4": 1,
-        "6": 1,
-        "7": 1,
-        "12": 1,
-        "8": 2,
-        "9": 2,
-        "10": 2,
-        "15": 2,
-        "11": 3,
-        "13": 3,
-        "14": 3,
-        "16": 3,
-        "17": 3,
-        "18": 4,
-        "19": 5
-      },
-      "cumulative_reach": [
-        2,
-        9,
-        13,
         18,
         19,
         20
