@@ -1,284 +1,478 @@
 {
   "model": "multiple",
-  "graph_source": "fourier",
+  "graph_source": "rumor",
   "models": {
     "independent_cascade": {
       "name": "Independent Cascade",
       "short_name": "IC",
       "parameter": "configurable p",
-      "description": "A newly mastered concept gets one chance to unlock each related concept \u2014 the 'aha' spreading."
+      "description": "A node that hears the rumor gets one chance to pass it to each neighbor \u2014 the rumor spreading."
     },
     "linear_threshold": {
       "name": "Linear Threshold",
       "short_name": "LT",
       "parameter": "custom thresholds",
-      "description": "A concept is mastered once enough of its neighbors are mastered \u2014 reinforcement."
+      "description": "A node acts on the rumor once enough of its neighbors have \u2014 reinforcement."
     }
   },
   "graph": {
     "nodes": [
       {
         "id": 0,
-        "faction": "concept",
-        "degree": 6,
-        "label": "Frequency \u2014 cycles per second",
-        "short": "freq"
+        "faction": "source",
+        "degree": 2,
+        "label": "FOMC statement \u2014 the Fed cuts rates",
+        "short": "FOMC"
       },
       {
         "id": 1,
-        "faction": "concept",
+        "faction": "source",
         "degree": 2,
-        "label": "Amplitude \u2014 wave height",
-        "short": "amp"
+        "label": "Fed speaker hints at cuts",
+        "short": "Speaker"
       },
       {
         "id": 2,
-        "faction": "concept",
-        "degree": 2,
-        "label": "Phase \u2014 where the cycle starts",
-        "short": "phase"
+        "faction": "media",
+        "degree": 6,
+        "label": "Bloomberg / Reuters newswires",
+        "short": "Wires"
       },
       {
         "id": 3,
-        "faction": "concept",
-        "degree": 5,
-        "label": "Superposition \u2014 waves add point by point",
-        "short": "superpos."
+        "faction": "media",
+        "degree": 4,
+        "label": "Financial social media",
+        "short": "Social"
       },
       {
         "id": 4,
-        "faction": "concept",
-        "degree": 3,
-        "label": "Spectrum \u2014 which frequencies a wave contains",
-        "short": "spectrum"
+        "faction": "media",
+        "degree": 2,
+        "label": "CNBC / TV coverage",
+        "short": "TV"
       },
       {
         "id": 5,
-        "faction": "misconception",
-        "degree": 2,
-        "label": "M1 \u00b7 faster wiggle = taller wave",
-        "short": "M1"
+        "faction": "participant",
+        "degree": 4,
+        "label": "HFT / algo traders",
+        "short": "Algos"
       },
       {
         "id": 6,
-        "faction": "misconception",
-        "degree": 2,
-        "label": "M2 \u00b7 adding waves adds their frequencies",
-        "short": "M2"
+        "faction": "participant",
+        "degree": 4,
+        "label": "Institutional trading desks",
+        "short": "Desks"
       },
       {
         "id": 7,
-        "faction": "misconception",
+        "faction": "participant",
         "degree": 2,
-        "label": "M3 \u00b7 phase shift changes pitch",
-        "short": "M3"
+        "label": "Market makers",
+        "short": "Makers"
       },
       {
         "id": 8,
-        "faction": "misconception",
+        "faction": "participant",
+        "degree": 3,
+        "label": "Bond desks",
+        "short": "Bonds"
+      },
+      {
+        "id": 9,
+        "faction": "participant",
         "degree": 2,
-        "label": "M4 \u00b7 a square wave is one frequency",
-        "short": "M4"
+        "label": "Economists / strategists",
+        "short": "Econ"
+      },
+      {
+        "id": 10,
+        "faction": "participant",
+        "degree": 4,
+        "label": "Retail investors",
+        "short": "Retail"
+      },
+      {
+        "id": 11,
+        "faction": "participant",
+        "degree": 2,
+        "label": "Options / gamma desks",
+        "short": "Options"
+      },
+      {
+        "id": 12,
+        "faction": "market",
+        "degree": 3,
+        "label": "Fed funds futures",
+        "short": "FedFunds",
+        "impact": "futures price in 2 more cuts"
+      },
+      {
+        "id": 13,
+        "faction": "market",
+        "degree": 4,
+        "label": "2-year Treasury yield",
+        "short": "2Y",
+        "impact": "2Y \u2212 24 bp"
+      },
+      {
+        "id": 14,
+        "faction": "market",
+        "degree": 4,
+        "label": "10-year Treasury yield",
+        "short": "10Y",
+        "impact": "10Y \u2212 11 bp"
+      },
+      {
+        "id": 15,
+        "faction": "market",
+        "degree": 5,
+        "label": "S&P 500",
+        "short": "S&P",
+        "impact": "S&P 500 +1.8%"
+      },
+      {
+        "id": 16,
+        "faction": "market",
+        "degree": 2,
+        "label": "Nasdaq 100",
+        "short": "Nasdaq",
+        "impact": "Nasdaq +2.4%"
+      },
+      {
+        "id": 17,
+        "faction": "market",
+        "degree": 2,
+        "label": "VIX volatility index",
+        "short": "VIX",
+        "impact": "VIX \u2212 3.2"
+      },
+      {
+        "id": 18,
+        "faction": "market",
+        "degree": 2,
+        "label": "US dollar index",
+        "short": "Dollar",
+        "impact": "dollar \u2212 0.6%"
+      },
+      {
+        "id": 19,
+        "faction": "market",
+        "degree": 1,
+        "label": "Gold",
+        "short": "Gold",
+        "impact": "gold +1.1%"
       }
     ],
     "links": [
       {
         "source": 0,
-        "target": 5,
-        "weight": 1.0
-      },
-      {
-        "source": 0,
-        "target": 6,
-        "weight": 1.0
-      },
-      {
-        "source": 0,
-        "target": 7,
-        "weight": 1.0
-      },
-      {
-        "source": 0,
-        "target": 3,
-        "weight": 1.0
-      },
-      {
-        "source": 0,
         "target": 2,
-        "weight": 1.0
+        "weight": 3.0
       },
       {
         "source": 0,
-        "target": 4,
-        "weight": 1.0
+        "target": 12,
+        "weight": 3.0
       },
       {
         "source": 1,
-        "target": 5,
-        "weight": 1.0
+        "target": 2,
+        "weight": 2.0
       },
       {
         "source": 1,
         "target": 3,
-        "weight": 1.0
+        "weight": 2.0
       },
       {
         "source": 2,
-        "target": 7,
-        "weight": 1.0
+        "target": 3,
+        "weight": 2.0
       },
       {
-        "source": 3,
-        "target": 6,
-        "weight": 1.0
-      },
-      {
-        "source": 3,
-        "target": 8,
-        "weight": 1.0
-      },
-      {
-        "source": 3,
+        "source": 2,
         "target": 4,
-        "weight": 1.0
+        "weight": 2.0
+      },
+      {
+        "source": 2,
+        "target": 5,
+        "weight": 3.0
+      },
+      {
+        "source": 2,
+        "target": 6,
+        "weight": 2.0
+      },
+      {
+        "source": 3,
+        "target": 5,
+        "weight": 2.0
+      },
+      {
+        "source": 3,
+        "target": 10,
+        "weight": 2.0
       },
       {
         "source": 4,
+        "target": 10,
+        "weight": 2.0
+      },
+      {
+        "source": 5,
+        "target": 7,
+        "weight": 2.0
+      },
+      {
+        "source": 5,
+        "target": 12,
+        "weight": 3.0
+      },
+      {
+        "source": 6,
         "target": 8,
+        "weight": 2.0
+      },
+      {
+        "source": 6,
+        "target": 9,
+        "weight": 1.0
+      },
+      {
+        "source": 6,
+        "target": 15,
+        "weight": 2.0
+      },
+      {
+        "source": 7,
+        "target": 15,
+        "weight": 1.0
+      },
+      {
+        "source": 8,
+        "target": 13,
+        "weight": 3.0
+      },
+      {
+        "source": 8,
+        "target": 14,
+        "weight": 2.0
+      },
+      {
+        "source": 9,
+        "target": 14,
+        "weight": 1.0
+      },
+      {
+        "source": 10,
+        "target": 11,
+        "weight": 1.0
+      },
+      {
+        "source": 10,
+        "target": 16,
+        "weight": 1.0
+      },
+      {
+        "source": 11,
+        "target": 17,
+        "weight": 2.0
+      },
+      {
+        "source": 12,
+        "target": 13,
+        "weight": 2.0
+      },
+      {
+        "source": 13,
+        "target": 14,
+        "weight": 1.0
+      },
+      {
+        "source": 13,
+        "target": 15,
+        "weight": 1.0
+      },
+      {
+        "source": 14,
+        "target": 18,
+        "weight": 1.0
+      },
+      {
+        "source": 15,
+        "target": 16,
+        "weight": 2.0
+      },
+      {
+        "source": 15,
+        "target": 17,
+        "weight": 1.0
+      },
+      {
+        "source": 18,
+        "target": 19,
         "weight": 1.0
       }
     ]
   },
   "scenarios": {
-    "frequency_first": {
+    "rate_cut": {
       "model": "independent_cascade",
-      "name": "Frequency clicks first",
-      "story": "The learner finally gets frequency. Phase and spectrum follow, then superposition \u2014 the misconceptions fall one by one, M1 last: it needs both frequency and amplitude.",
+      "name": "The Fed cuts rates",
+      "story": "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly \u2014 then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard.",
       "seeds": [
         0
       ],
       "parameters": {
         "activation_probability": 0.2,
-        "random_seed": 2
+        "random_seed": 7
       },
       "steps": [
         [
           0
         ],
         [
+          12
+        ],
+        [
+          13
+        ],
+        [
+          15
+        ],
+        [
           7,
+          17
+        ],
+        [
+          5
+        ],
+        [
           3
         ]
       ],
       "activation_times": {
         "0": 0,
-        "7": 1,
-        "3": 1
+        "12": 1,
+        "13": 2,
+        "15": 3,
+        "7": 4,
+        "17": 4,
+        "5": 5,
+        "3": 6
       },
       "cumulative_reach": [
         1,
-        3
+        2,
+        3,
+        4,
+        6,
+        7,
+        8
       ],
-      "total_reached": 3,
-      "total_nodes": 9
+      "total_reached": 8,
+      "total_nodes": 20
     },
-    "superposition_clicks": {
+    "speaker_hint": {
       "model": "independent_cascade",
-      "name": "Superposition clicks",
-      "story": "Superposition pulls in amplitude and spectrum, then frequency \u2014 the misconceptions resolve in a burst, M3 last: it waits on phase.",
+      "name": "A speaker hints at cuts",
+      "story": "One Fed speaker hints at cuts. Social runs with it and wires pick it up \u2014 but a hint is not a cut, and the move stalls before volatility or the dollar ever react.",
       "seeds": [
-        3
-      ],
-      "parameters": {
-        "activation_probability": 0.2,
-        "random_seed": 1
-      },
-      "steps": [
-        [
-          3
-        ],
-        [
-          6
-        ]
-      ],
-      "activation_times": {
-        "3": 0,
-        "6": 1
-      },
-      "cumulative_reach": [
-        1,
-        2
-      ],
-      "total_reached": 2,
-      "total_nodes": 9
-    },
-    "misconception_first": {
-      "model": "independent_cascade",
-      "name": "Confront M1 head-on",
-      "story": "Attacking M1 ('faster = taller') directly teaches amplitude \u2014 then stalls. One misconception can't seed a curriculum.",
-      "seeds": [
-        5
-      ],
-      "parameters": {
-        "activation_probability": 0.2,
-        "random_seed": 14
-      },
-      "steps": [
-        [
-          5
-        ],
-        [
-          0
-        ]
-      ],
-      "activation_times": {
-        "5": 0,
-        "0": 1
-      },
-      "cumulative_reach": [
-        1,
-        2
-      ],
-      "total_reached": 2,
-      "total_nodes": 9
-    },
-    "core_pair": {
-      "model": "independent_cascade",
-      "name": "Frequency + amplitude together",
-      "story": "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more.",
-      "seeds": [
-        0,
         1
       ],
       "parameters": {
         "activation_probability": 0.2,
-        "random_seed": 5
+        "random_seed": 3
       },
       "steps": [
         [
-          0,
           1
-        ],
-        [
-          5
         ]
       ],
       "activation_times": {
-        "0": 0,
-        "1": 0,
-        "5": 1
+        "1": 0
+      },
+      "cumulative_reach": [
+        1
+      ],
+      "total_reached": 1,
+      "total_nodes": 20
+    },
+    "retail_fomo": {
+      "model": "independent_cascade",
+      "name": "Retail piles in first",
+      "story": "Retail piles into the rumor first. The noise travels backward \u2014 even the FOMC 'hears' it \u2014 but without institutional confirmation the bond market never fully buys in.",
+      "seeds": [
+        10
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 11
+      },
+      "steps": [
+        [
+          10
+        ]
+      ],
+      "activation_times": {
+        "10": 0
+      },
+      "cumulative_reach": [
+        1
+      ],
+      "total_reached": 1,
+      "total_nodes": 20
+    },
+    "wire_algo": {
+      "model": "independent_cascade",
+      "name": "Wires and algos together",
+      "story": "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps.",
+      "seeds": [
+        2,
+        5
+      ],
+      "parameters": {
+        "activation_probability": 0.2,
+        "random_seed": 9
+      },
+      "steps": [
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          1,
+          9
+        ]
+      ],
+      "activation_times": {
+        "2": 0,
+        "5": 0,
+        "3": 1,
+        "6": 1,
+        "1": 2,
+        "9": 2
       },
       "cumulative_reach": [
         2,
-        3
+        4,
+        6
       ],
-      "total_reached": 3,
-      "total_nodes": 9
+      "total_reached": 6,
+      "total_nodes": 20
     },
-    "lt_frequency_first": {
+    "lt_rate_cut": {
       "model": "linear_threshold",
-      "name": "Frequency clicks first",
-      "story": "The learner finally gets frequency. Phase and spectrum follow, then superposition \u2014 the misconceptions fall one by one, M1 last: it needs both frequency and amplitude.",
+      "name": "The Fed cuts rates",
+      "story": "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly \u2014 then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard.",
       "seeds": [
         0
       ],
@@ -297,174 +491,97 @@
         ],
         [
           2,
-          4
+          12
         ],
         [
+          1,
           3,
-          7
-        ],
-        [
-          1,
-          6,
-          8
-        ],
-        [
-          5
-        ]
-      ],
-      "activation_times": {
-        "0": 0,
-        "2": 1,
-        "4": 1,
-        "3": 2,
-        "7": 2,
-        "1": 3,
-        "6": 3,
-        "8": 3,
-        "5": 4
-      },
-      "cumulative_reach": [
-        1,
-        3,
-        5,
-        8,
-        9
-      ],
-      "total_reached": 9,
-      "total_nodes": 9,
-      "thresholds": {
-        "0": 0.3,
-        "1": 0.3,
-        "2": 0.3,
-        "3": 0.3,
-        "4": 0.3,
-        "5": 0.55,
-        "6": 0.55,
-        "7": 0.55,
-        "8": 0.55
-      }
-    },
-    "lt_superposition_clicks": {
-      "model": "linear_threshold",
-      "name": "Superposition clicks",
-      "story": "Superposition pulls in amplitude and spectrum, then frequency \u2014 the misconceptions resolve in a burst, M3 last: it waits on phase.",
-      "seeds": [
-        3
-      ],
-      "parameters": {
-        "influence": "normalized_edge_weight",
-        "threshold_distribution": "custom",
-        "threshold_parameters": {
-          "low": 0.1,
-          "high": 0.5
-        },
-        "threshold_seed": 152
-      },
-      "steps": [
-        [
-          3
-        ],
-        [
-          1,
-          4
-        ],
-        [
-          0,
-          8
-        ],
-        [
-          2,
+          4,
           5,
           6
         ],
         [
-          7
+          7,
+          8,
+          9,
+          10
+        ],
+        [
+          11,
+          13,
+          14,
+          15
+        ],
+        [
+          16,
+          17,
+          18
+        ],
+        [
+          19
         ]
       ],
       "activation_times": {
-        "3": 0,
-        "1": 1,
-        "4": 1,
-        "0": 2,
-        "8": 2,
-        "2": 3,
-        "5": 3,
-        "6": 3,
-        "7": 4
+        "0": 0,
+        "2": 1,
+        "12": 1,
+        "1": 2,
+        "3": 2,
+        "4": 2,
+        "5": 2,
+        "6": 2,
+        "7": 3,
+        "8": 3,
+        "9": 3,
+        "10": 3,
+        "11": 4,
+        "13": 4,
+        "14": 4,
+        "15": 4,
+        "16": 5,
+        "17": 5,
+        "18": 5,
+        "19": 6
       },
       "cumulative_reach": [
         1,
         3,
-        5,
         8,
-        9
+        12,
+        16,
+        19,
+        20
       ],
-      "total_reached": 9,
-      "total_nodes": 9,
+      "total_reached": 20,
+      "total_nodes": 20,
       "thresholds": {
-        "0": 0.3,
-        "1": 0.3,
-        "2": 0.3,
-        "3": 0.3,
+        "0": 0.25,
+        "1": 0.25,
+        "2": 0.2,
+        "3": 0.25,
         "4": 0.3,
-        "5": 0.55,
-        "6": 0.55,
-        "7": 0.55,
-        "8": 0.55
+        "5": 0.15,
+        "6": 0.25,
+        "7": 0.3,
+        "8": 0.25,
+        "9": 0.4,
+        "10": 0.55,
+        "11": 0.3,
+        "12": 0.25,
+        "13": 0.3,
+        "14": 0.35,
+        "15": 0.35,
+        "16": 0.35,
+        "17": 0.3,
+        "18": 0.4,
+        "19": 0.45
       }
     },
-    "lt_misconception_first": {
+    "lt_speaker_hint": {
       "model": "linear_threshold",
-      "name": "Confront M1 head-on",
-      "story": "Attacking M1 ('faster = taller') directly teaches amplitude \u2014 then stalls. One misconception can't seed a curriculum.",
+      "name": "A speaker hints at cuts",
+      "story": "One Fed speaker hints at cuts. Social runs with it and wires pick it up \u2014 but a hint is not a cut, and the move stalls before volatility or the dollar ever react.",
       "seeds": [
-        5
-      ],
-      "parameters": {
-        "influence": "normalized_edge_weight",
-        "threshold_distribution": "custom",
-        "threshold_parameters": {
-          "low": 0.1,
-          "high": 0.5
-        },
-        "threshold_seed": 152
-      },
-      "steps": [
-        [
-          5
-        ],
-        [
-          1
-        ]
-      ],
-      "activation_times": {
-        "5": 0,
-        "1": 1
-      },
-      "cumulative_reach": [
-        1,
-        2
-      ],
-      "total_reached": 2,
-      "total_nodes": 9,
-      "thresholds": {
-        "0": 0.3,
-        "1": 0.3,
-        "2": 0.3,
-        "3": 0.3,
-        "4": 0.3,
-        "5": 0.55,
-        "6": 0.55,
-        "7": 0.55,
-        "8": 0.55
-      }
-    },
-    "lt_core_pair": {
-      "model": "linear_threshold",
-      "name": "Frequency + amplitude together",
-      "story": "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more.",
-      "seeds": [
-        0,
         1
       ],
       "parameters": {
@@ -478,49 +595,314 @@
       },
       "steps": [
         [
-          0,
           1
         ],
         [
+          3
+        ],
+        [
           2,
-          3,
-          4,
           5
         ],
         [
+          0,
+          4,
           6,
           7,
-          8
+          12
+        ],
+        [
+          8,
+          9,
+          10,
+          15
+        ],
+        [
+          11,
+          13,
+          14,
+          16,
+          17
+        ],
+        [
+          18
+        ],
+        [
+          19
         ]
       ],
       "activation_times": {
-        "0": 0,
         "1": 0,
-        "2": 1,
+        "3": 1,
+        "2": 2,
+        "5": 2,
+        "0": 3,
+        "4": 3,
+        "6": 3,
+        "7": 3,
+        "12": 3,
+        "8": 4,
+        "9": 4,
+        "10": 4,
+        "15": 4,
+        "11": 5,
+        "13": 5,
+        "14": 5,
+        "16": 5,
+        "17": 5,
+        "18": 6,
+        "19": 7
+      },
+      "cumulative_reach": [
+        1,
+        2,
+        4,
+        9,
+        13,
+        18,
+        19,
+        20
+      ],
+      "total_reached": 20,
+      "total_nodes": 20,
+      "thresholds": {
+        "0": 0.25,
+        "1": 0.25,
+        "2": 0.2,
+        "3": 0.25,
+        "4": 0.3,
+        "5": 0.15,
+        "6": 0.25,
+        "7": 0.3,
+        "8": 0.25,
+        "9": 0.4,
+        "10": 0.55,
+        "11": 0.3,
+        "12": 0.25,
+        "13": 0.3,
+        "14": 0.35,
+        "15": 0.35,
+        "16": 0.35,
+        "17": 0.3,
+        "18": 0.4,
+        "19": 0.45
+      }
+    },
+    "lt_retail_fomo": {
+      "model": "linear_threshold",
+      "name": "Retail piles in first",
+      "story": "Retail piles into the rumor first. The noise travels backward \u2014 even the FOMC 'hears' it \u2014 but without institutional confirmation the bond market never fully buys in.",
+      "seeds": [
+        10
+      ],
+      "parameters": {
+        "influence": "normalized_edge_weight",
+        "threshold_distribution": "custom",
+        "threshold_parameters": {
+          "low": 0.1,
+          "high": 0.5
+        },
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          10
+        ],
+        [
+          3,
+          4,
+          11
+        ],
+        [
+          1,
+          2,
+          5,
+          17
+        ],
+        [
+          0,
+          6,
+          7,
+          12
+        ],
+        [
+          8,
+          9,
+          15
+        ],
+        [
+          13,
+          14,
+          16
+        ],
+        [
+          18
+        ],
+        [
+          19
+        ]
+      ],
+      "activation_times": {
+        "10": 0,
         "3": 1,
         "4": 1,
-        "5": 1,
-        "6": 2,
-        "7": 2,
-        "8": 2
+        "11": 1,
+        "1": 2,
+        "2": 2,
+        "5": 2,
+        "17": 2,
+        "0": 3,
+        "6": 3,
+        "7": 3,
+        "12": 3,
+        "8": 4,
+        "9": 4,
+        "15": 4,
+        "13": 5,
+        "14": 5,
+        "16": 5,
+        "18": 6,
+        "19": 7
+      },
+      "cumulative_reach": [
+        1,
+        4,
+        8,
+        12,
+        15,
+        18,
+        19,
+        20
+      ],
+      "total_reached": 20,
+      "total_nodes": 20,
+      "thresholds": {
+        "0": 0.25,
+        "1": 0.25,
+        "2": 0.2,
+        "3": 0.25,
+        "4": 0.3,
+        "5": 0.15,
+        "6": 0.25,
+        "7": 0.3,
+        "8": 0.25,
+        "9": 0.4,
+        "10": 0.55,
+        "11": 0.3,
+        "12": 0.25,
+        "13": 0.3,
+        "14": 0.35,
+        "15": 0.35,
+        "16": 0.35,
+        "17": 0.3,
+        "18": 0.4,
+        "19": 0.45
+      }
+    },
+    "lt_wire_algo": {
+      "model": "linear_threshold",
+      "name": "Wires and algos together",
+      "story": "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps.",
+      "seeds": [
+        2,
+        5
+      ],
+      "parameters": {
+        "influence": "normalized_edge_weight",
+        "threshold_distribution": "custom",
+        "threshold_parameters": {
+          "low": 0.1,
+          "high": 0.5
+        },
+        "threshold_seed": 152
+      },
+      "steps": [
+        [
+          2,
+          5
+        ],
+        [
+          0,
+          1,
+          3,
+          4,
+          6,
+          7,
+          12
+        ],
+        [
+          8,
+          9,
+          10,
+          15
+        ],
+        [
+          11,
+          13,
+          14,
+          16,
+          17
+        ],
+        [
+          18
+        ],
+        [
+          19
+        ]
+      ],
+      "activation_times": {
+        "2": 0,
+        "5": 0,
+        "0": 1,
+        "1": 1,
+        "3": 1,
+        "4": 1,
+        "6": 1,
+        "7": 1,
+        "12": 1,
+        "8": 2,
+        "9": 2,
+        "10": 2,
+        "15": 2,
+        "11": 3,
+        "13": 3,
+        "14": 3,
+        "16": 3,
+        "17": 3,
+        "18": 4,
+        "19": 5
       },
       "cumulative_reach": [
         2,
-        6,
-        9
+        9,
+        13,
+        18,
+        19,
+        20
       ],
-      "total_reached": 9,
-      "total_nodes": 9,
+      "total_reached": 20,
+      "total_nodes": 20,
       "thresholds": {
-        "0": 0.3,
-        "1": 0.3,
-        "2": 0.3,
-        "3": 0.3,
+        "0": 0.25,
+        "1": 0.25,
+        "2": 0.2,
+        "3": 0.25,
         "4": 0.3,
-        "5": 0.55,
-        "6": 0.55,
-        "7": 0.55,
-        "8": 0.55
+        "5": 0.15,
+        "6": 0.25,
+        "7": 0.3,
+        "8": 0.25,
+        "9": 0.4,
+        "10": 0.55,
+        "11": 0.3,
+        "12": 0.25,
+        "13": 0.3,
+        "14": 0.35,
+        "15": 0.35,
+        "16": 0.35,
+        "17": 0.3,
+        "18": 0.4,
+        "19": 0.45
       }
     }
   }
