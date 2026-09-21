@@ -7,8 +7,9 @@ science, epidemiology and marketing research (Kempe, Kleinberg & Tardos,
 with a handful of people, how far does it spread through a social network,
 and how fast?
 
-Here it doubles as a learner model: run on a concept graph, each activation
-is a mastered concept, and the cascade is an "aha" spreading from idea to idea.
+Here it doubles as a market model: run on a rumor network, each activation
+is an actor hearing the rumor, and the cascade is a rate-cut rumor moving
+from the Fed to gold.
 
 Mechanics
 ---------

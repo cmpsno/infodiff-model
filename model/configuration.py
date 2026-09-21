@@ -22,7 +22,7 @@ class SimulationConfig:
     Custom distributions use the node-to-threshold mapping in ``thresholds``.
     """
 
-    graph: str = "fourier"
+    graph: str = "rumor"
     models: list[str] = field(
         default_factory=lambda: ["independent_cascade", "linear_threshold"]
     )

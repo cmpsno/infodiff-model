@@ -8,23 +8,30 @@ from graph_io import load_graph, normalize_node_ids
 from independent_cascade import independent_cascade
 from linear_threshold import linear_threshold
 
-P = 0.2
+P = 0.6
 THRESHOLD_MIN, THRESHOLD_MAX, THRESHOLD_SEED = 0.1, 0.5, 152
-# Node ids on the fourier concept graph: 0 frequency, 1 amplitude, 2 phase,
-# 3 superposition, 4 spectrum, 5 M1, 6 M2, 7 M3, 8 M4.
-# Core concepts are easier to master (0.3); misconceptions only resolve once
-# most of their prerequisites are mastered (0.55).
-FOURIER_THRESHOLDS = {0: 0.3, 1: 0.3, 2: 0.3, 3: 0.3, 4: 0.3, 5: 0.55, 6: 0.55, 7: 0.55, 8: 0.55}
+# Node ids on the rumor-market graph: 0 FOMC, 1 speaker, 2 wires, 3 social,
+# 4 TV, 5 algos, 6 desks, 7 makers, 8 bonds, 9 econ, 10 retail, 11 options,
+# 12 fed funds futures, 13 2Y, 14 10Y, 15 S&P 500, 16 Nasdaq, 17 VIX,
+# 18 dollar, 19 gold.
+# Fast actors (wires, algos) believe quickly; retail needs confirmation;
+# market outcomes move only once enough participants act on the rumor.
+RUMOR_THRESHOLDS = {
+    0: 0.25, 1: 0.25,
+    2: 0.20, 3: 0.25, 4: 0.30,
+    5: 0.15, 6: 0.25, 7: 0.30, 8: 0.25, 9: 0.40, 10: 0.55, 11: 0.30,
+    12: 0.25, 13: 0.30, 14: 0.35, 15: 0.35, 16: 0.35, 17: 0.30, 18: 0.40, 19: 0.45,
+}
 SEEDING_SCENARIOS = [
- ("frequency_first", "Frequency clicks first", [0], 2, "The learner finally gets frequency. Phase and spectrum follow, then superposition — the misconceptions fall one by one, M1 last: it needs both frequency and amplitude."),
- ("superposition_clicks", "Superposition clicks", [3], 1, "Superposition pulls in amplitude and spectrum, then frequency — the misconceptions resolve in a burst, M3 last: it waits on phase."),
- ("misconception_first", "Confront M1 head-on", [5], 14, "Attacking M1 ('faster = taller') directly teaches amplitude — then stalls. One misconception can't seed a curriculum."),
- ("core_pair", "Frequency + amplitude together", [0, 1], 5, "Two core concepts at once: M1 resolves on the first step and the rest of the graph follows in two more."),
+ ("rate_cut", "The Fed cuts rates", [0], 7, "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly — then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard."),
+ ("speaker_hint", "A speaker hints at cuts", [1], 3, "One Fed speaker hints at cuts. Social runs with it and wires pick it up — but a hint is not a cut, and the move stalls before volatility or the dollar ever react."),
+ ("retail_fomo", "Retail piles in first", [10], 11, "Retail piles into the rumor first. The noise travels backward — even the FOMC 'hears' it — but without institutional confirmation the bond market never fully buys in."),
+ ("wire_algo", "Wires and algos together", [2, 5], 9, "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps."),
 ]
 
 def default_config():
-    return SimulationConfig(graph="fourier", random_seed=THRESHOLD_SEED, threshold_distribution="custom",
-                            thresholds=dict(FOURIER_THRESHOLDS), seed_strategies=[
+    return SimulationConfig(graph="rumor", random_seed=THRESHOLD_SEED, threshold_distribution="custom",
+                            thresholds=dict(RUMOR_THRESHOLDS), seed_strategies=[
         {"key": k, "name": n, "seeds": s, "random_seed": r, "story": story}
         for k, n, s, r, story in SEEDING_SCENARIOS])
 
@@ -38,6 +45,7 @@ def build_graph_payload(graph):
         item = {"id": node, "faction": faction, "degree": graph.degree[node]}
         if "label" in attrs: item["label"] = str(attrs["label"])
         if "short" in attrs: item["short"] = str(attrs["short"])
+        if "impact" in attrs and attrs["impact"]: item["impact"] = str(attrs["impact"])
         if "source_id" in attrs: item["source_id"] = str(attrs["source_id"])
         nodes.append(item)
     links = [{"source": u, "target": v, "weight": float(d.get("weight", 1.0))} for u, v, d in graph.edges(data=True)]
@@ -91,14 +99,14 @@ def generate(config):
     config.validate()
     graph = normalize_node_ids(load_graph(config.graph, random_seed=config.random_seed, **config.graph_options))
     models = {
-      "independent_cascade": {"name": "Independent Cascade", "short_name": "IC", "parameter": "configurable p", "description": "A newly mastered concept gets one chance to unlock each related concept — the 'aha' spreading."},
-      "linear_threshold": {"name": "Linear Threshold", "short_name": "LT", "parameter": f"{config.threshold_distribution} thresholds", "description": "A concept is mastered once enough of its neighbors are mastered — reinforcement."}}
+      "independent_cascade": {"name": "Independent Cascade", "short_name": "IC", "parameter": "configurable p", "description": "A node that hears the rumor gets one chance to pass it to each neighbor — the rumor spreading."},
+      "linear_threshold": {"name": "Linear Threshold", "short_name": "LT", "parameter": f"{config.threshold_distribution} thresholds", "description": "A node acts on the rumor once enough of its neighbors have — reinforcement."}}
     return {"model": "multiple", "graph_source": config.graph, "models": {k: models[k] for k in config.models}, "graph": build_graph_payload(graph), "scenarios": build_scenarios_payload(graph, config)}
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, help="JSON configuration file")
-    parser.add_argument("--graph", default="fourier", help="fourier, karate, generator spec, or graph file")
+    parser.add_argument("--graph", default="rumor", help="rumor, fourier, karate, generator spec, or graph file")
     parser.add_argument("--model", choices=["ic", "lt", "both"], default="both")
     parser.add_argument("--p", type=float, nargs="+", default=[P])
     parser.add_argument("--seeds", type=int, nargs="+", help="one custom seed set")
@@ -109,7 +117,7 @@ def main():
     args = parse_args()
     if args.config:
         config = SimulationConfig.from_dict(json.loads(args.config.read_text(encoding="utf-8")))
-    elif args.graph == "fourier" and args.model == "both" and args.p == [P] and not args.seeds:
+    elif args.graph == "rumor" and args.model == "both" and args.p == [P] and not args.seeds:
         config = default_config()
     else:
         models = {"ic": ["independent_cascade"], "lt": ["linear_threshold"], "both": ["independent_cascade", "linear_threshold"]}[args.model]

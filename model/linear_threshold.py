@@ -10,9 +10,9 @@ The implementation uses equal influence weights: each neighbor contributes
 ``1 / degree(node)`` to a node's total influence. Thresholds are supplied by
 the caller so experiments remain explicit and reproducible.
 
-On a concept graph this is a mastery-propagation rule: a concept is mastered
-once enough of its prerequisite neighbors are, and hard-to-displace
-misconceptions simply carry higher thresholds.
+On a rumor network this is a belief-propagation rule: a node acts on the
+rumor once enough of its neighbors have, and hard-to-convince actors
+simply carry higher thresholds.
 """
 
 from __future__ import annotations

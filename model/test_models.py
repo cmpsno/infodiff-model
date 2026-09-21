@@ -9,8 +9,8 @@ import networkx as nx
 
 from batch_simulate import run_batch
 from configuration import SimulationConfig
-from generate_simulation import FOURIER_THRESHOLDS, THRESHOLD_SEED, build_scenarios_payload
-from graph_io import fourier_concept_graph, load_graph
+from generate_simulation import RUMOR_THRESHOLDS, THRESHOLD_SEED, build_scenarios_payload
+from graph_io import load_graph, rumor_market_graph
 from independent_cascade import independent_cascade
 from linear_threshold import linear_threshold
 
@@ -59,39 +59,44 @@ class LinearThresholdTests(ResultContractMixin, unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "thresholds are missing"):
             linear_threshold(nx.path_graph(2), [0], {0: 0.5})
 
-    def test_frequency_first_spread_is_deterministic(self) -> None:
-        graph = fourier_concept_graph()
-        result = linear_threshold(graph, [0], FOURIER_THRESHOLDS)
-        self.assertEqual(result.steps, [[0], [2, 4], [3, 7], [1, 6, 8], [5]])
+    def test_rate_cut_spread_is_deterministic(self) -> None:
+        graph = rumor_market_graph()
+        result = linear_threshold(graph, [0], RUMOR_THRESHOLDS, weight="weight")
+        self.assertEqual(result.steps, [[0], [2, 12], [1, 3, 4, 5, 6], [7, 8, 9, 10], [11, 13, 14, 15], [16, 17, 18], [19]])
         self.assert_valid_result(result, graph.number_of_nodes())
 
-    def test_misconception_seed_stalls(self) -> None:
-        graph = fourier_concept_graph()
-        result = linear_threshold(graph, [5], FOURIER_THRESHOLDS)
-        self.assertEqual(result.steps, [[5], [1]])
+    def test_market_outcome_seed_stalls(self) -> None:
+        graph = rumor_market_graph()
+        result = linear_threshold(graph, [19], RUMOR_THRESHOLDS, weight="weight")
+        self.assertEqual(result.steps, [[19], [18]])
         self.assert_valid_result(result, graph.number_of_nodes())
 
 
-class FourierGraphTests(unittest.TestCase):
-    def test_concept_graph_structure(self) -> None:
-        graph = fourier_concept_graph()
-        self.assertEqual(graph.number_of_nodes(), 9)
-        self.assertEqual(graph.number_of_edges(), 13)
+class RumorGraphTests(unittest.TestCase):
+    def test_rumor_graph_structure(self) -> None:
+        graph = rumor_market_graph()
+        self.assertEqual(graph.number_of_nodes(), 20)
+        self.assertEqual(graph.number_of_edges(), 30)
         kinds = [graph.nodes[n]["kind"] for n in graph.nodes]
-        self.assertEqual(kinds.count("concept"), 5)
-        self.assertEqual(kinds.count("misconception"), 4)
+        self.assertEqual(kinds.count("source"), 2)
+        self.assertEqual(kinds.count("media"), 3)
+        self.assertEqual(kinds.count("participant"), 7)
+        self.assertEqual(kinds.count("market"), 8)
         for node in graph.nodes:
             self.assertTrue(graph.nodes[node]["label"])
             self.assertTrue(graph.nodes[node]["short"])
+        for node in graph.nodes:
+            if graph.nodes[node]["kind"] == "market":
+                self.assertTrue(graph.nodes[node]["impact"])
 
-    def test_load_graph_fourier(self) -> None:
-        graph = load_graph("fourier")
-        self.assertEqual(graph.number_of_nodes(), 9)
+    def test_load_graph_rumor(self) -> None:
+        graph = load_graph("rumor")
+        self.assertEqual(graph.number_of_nodes(), 20)
 
 
 class GeneratedDataTests(unittest.TestCase):
     def test_every_model_has_scenarios_that_follow_the_playback_contract(self) -> None:
-        graph = load_graph("fourier")
+        graph = load_graph("rumor")
         scenarios = build_scenarios_payload(graph)
         self.assertEqual(
             {scenario["model"] for scenario in scenarios.values()},
