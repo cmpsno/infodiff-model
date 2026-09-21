@@ -98,7 +98,7 @@
   }
   function stop(){ playing=false; clearTimeout(timer); if(key) render(); }
   function go(value){ step=Math.max(0,Math.min(value,totalSteps())); if(step===totalSteps())playing=false; render(); }
-  function tick(){ timer=setTimeout(()=>{go(step+1); if(playing&&step<totalSteps())tick();},Number(el["speed-range"].value)); }
+  function tick(){ timer=setTimeout(()=>{go(step+1); if(playing&&step<totalSteps())tick(); else if(autoplay){ timer=setTimeout(()=>{ if(!autoplay) return; step=0; playing=true; render(); tick(); },1600); } },Number(el["speed-range"].value)); }
   function loadModel(value){
     stop(); model=value; const options=matching(model); el["scenario-select"].replaceChildren(...options.map(k=>new Option(scenarios[k].name,k)));
     key=options[0]; step=0; el["model-select"].value=model;
@@ -128,4 +128,12 @@
       const a=document.createElement("a");a.download=`infodiff-${key}-step-${step}.png`;a.href=canvas.toDataURL("image/png");a.click();}; image.src=url;
   };
   loadModel(model);
+  /* Guided intro: autoplay the core-pair sequence on loop until the viewer takes over. */
+  let autoplay = true;
+  for (const id of ["play-btn","back-btn","step-btn","reset-btn","timeline-range","speed-range","model-select","scenario-select","compare-toggle","export-btn"]) {
+    el[id].addEventListener("pointerdown", () => { autoplay = false; }, { capture: true });
+  }
+  el["scenario-select"].value = "lt_core_pair";
+  key = "lt_core_pair"; step = 0;
+  playing = true; render(); tick();
 })();
