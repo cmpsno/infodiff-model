@@ -8,7 +8,7 @@ with a handful of people, how far does it spread through a social network,
 and how fast?
 
 Here it doubles as a market model: run on a rumor network, each activation
-is an actor hearing the rumor, and the cascade is a rate-cut rumor moving
+is an actor hearing the rumor, and the cascade is a rate-hike rumor moving
 from the Fed to gold.
 
 Mechanics

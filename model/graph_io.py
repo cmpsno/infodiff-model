@@ -100,7 +100,7 @@ def fourier_concept_graph() -> nx.Graph:
 
 
 def rumor_market_graph() -> nx.Graph:
-    """Rumor network: how a Fed rate-cut rumor moves the stock market.
+    """Rumor network: how a hot CPI print reprices the Fed and moves the stock market.
 
     Nodes are rumor sources, transmission channels, market participants, and
     market outcomes; edges are information-flow links with weights. A rumor
@@ -108,11 +108,13 @@ def rumor_market_graph() -> nx.Graph:
     the way information spreads across a social network: node ids are stable
     integers, human-readable names live in the ``label`` attribute, ``kind``
     marks the node's role, and market nodes carry an ``impact`` string
-    describing the price move when the rumor reaches them.
+    describing the price move when the rumor reaches them. Node labels and
+    impacts are anchored to the September 2026 episode: a hot August CPI
+    print, a 25bp Fed hike to 3.75-4.00%, and the market pricing another.
     """
     nodes = {
-        0: ("fomc", "FOMC", "FOMC statement — the Fed cuts rates", "source", ""),
-        1: ("speaker", "Speaker", "Fed speaker hints at cuts", "source", ""),
+        0: ("fomc", "FOMC", "FOMC — the Fed hikes 25bp to 3.75–4.00%", "source", ""),
+        1: ("speaker", "Speaker", "Chair Warsh: inflation 'too high for too long'", "source", ""),
         2: ("wires", "Wires", "Bloomberg / Reuters newswires", "media", ""),
         3: ("social", "Social", "Financial social media", "media", ""),
         4: ("tv", "TV", "CNBC / TV coverage", "media", ""),
@@ -123,14 +125,14 @@ def rumor_market_graph() -> nx.Graph:
         9: ("econ", "Econ", "Economists / strategists", "participant", ""),
         10: ("retail", "Retail", "Retail investors", "participant", ""),
         11: ("options", "Options", "Options / gamma desks", "participant", ""),
-        12: ("fedfunds", "FedFunds", "Fed funds futures", "market", "futures price in 2 more cuts"),
-        13: ("y2", "2Y", "2-year Treasury yield", "market", "2Y \u2212 24 bp"),
-        14: ("y10", "10Y", "10-year Treasury yield", "market", "10Y \u2212 11 bp"),
-        15: ("spx", "S&P", "S&P 500", "market", "S&P 500 +1.8%"),
-        16: ("ndx", "Nasdaq", "Nasdaq 100", "market", "Nasdaq +2.4%"),
-        17: ("vix", "VIX", "VIX volatility index", "market", "VIX \u2212 3.2"),
-        18: ("dxy", "Dollar", "US dollar index", "market", "dollar \u2212 0.6%"),
-        19: ("gold", "Gold", "Gold", "market", "gold +1.1%"),
+        12: ("fedfunds", "Odds", "Hike odds for the next meeting (FedWatch)", "market", "dot plot: one more hike this year"),
+        13: ("y2", "2Y", "2-year Treasury yield", "market", "2Y 4.22% → 4.30%"),
+        14: ("y10", "10Y", "10-year Treasury yield", "market", "10Y closed 5.006%"),
+        15: ("spx", "S&P", "S&P 500", "market", "S&P 500 −0.45%"),
+        16: ("ndx", "Nasdaq", "Nasdaq Composite", "market", "Nasdaq −0.01%"),
+        17: ("vix", "VIX", "VIX volatility index", "market", "VIX 17.71 (+3%)"),
+        18: ("dxy", "Dollar", "US dollar index", "market", "dollar +0.7%"),
+        19: ("gold", "Gold", "Gold", "market", "gold fell to $4,310"),
     }
     edges = [
         (0, 2, 3), (0, 12, 3),

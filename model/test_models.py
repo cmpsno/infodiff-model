@@ -59,7 +59,7 @@ class LinearThresholdTests(ResultContractMixin, unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "thresholds are missing"):
             linear_threshold(nx.path_graph(2), [0], {0: 0.5})
 
-    def test_rate_cut_spread_is_deterministic(self) -> None:
+    def test_fed_hike_spread_is_deterministic(self) -> None:
         graph = rumor_market_graph()
         result = linear_threshold(graph, [0], RUMOR_THRESHOLDS, weight="weight")
         self.assertEqual(result.steps, [[0], [2, 12], [1, 3, 4, 5, 6], [7, 8, 9, 10], [11, 13, 14, 15], [16, 17, 18], [19]])

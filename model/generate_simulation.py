@@ -23,10 +23,10 @@ RUMOR_THRESHOLDS = {
     12: 0.25, 13: 0.30, 14: 0.35, 15: 0.35, 16: 0.35, 17: 0.30, 18: 0.40, 19: 0.45,
 }
 SEEDING_SCENARIOS = [
- ("rate_cut", "The Fed cuts rates", [0], 7, "The FOMC cuts rates. Wires flash it in seconds and futures reprice instantly — then algos, desks and TV carry the rumor outward. Bond desks move the 2Y, equities follow, and by the end even gold has heard."),
- ("speaker_hint", "A speaker hints at cuts", [1], 3, "One Fed speaker hints at cuts. Social runs with it and wires pick it up — but a hint is not a cut, and the move stalls before volatility or the dollar ever react."),
- ("retail_fomo", "Retail piles in first", [10], 11, "Retail piles into the rumor first. The noise travels backward — even the FOMC 'hears' it — but without institutional confirmation the bond market never fully buys in."),
- ("wire_algo", "Wires and algos together", [2, 5], 9, "Wires and algos get it at the same instant. The rumor jumps straight to the trading floor: futures, desks and equities move within steps."),
+ ("hot_cpi", "Hot CPI print", [2], 5, "September 11: August CPI prints 3.4% — core 0.3% against 0.2% expected. Wires flash it, hike odds jump to 85%, and the repricing runs through algos, desks and bonds into every market outcome."),
+ ("fed_hike", "The Fed hikes", [0], 7, "September 16: the Fed raises 25bp to 3.75–4.00%, its first hike since 2023. The dot plot points to one more this year — futures, yields, equities and the dollar all move."),
+ ("speaker_hawk", "Warsh doubles down", [1], 3, "Chair Warsh: inflation has been 'too high for too long.' The press conference pushes yields and the dollar higher — and this time the move carries all the way to gold."),
+ ("retail_panic", "Retail piles in late", [10], 11, "Retail piles in after the move — selling winners once half the repricing is done. The noise travels backward, even reaching the FOMC, and late as it is, it still reaches gold."),
 ]
 
 def default_config():
