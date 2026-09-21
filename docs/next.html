@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What happens next · infodiff-model</title>
+<meta name="description" content="Kalshi prediction-market odds on the next Fed decisions, turned into one inference." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .nx-inference {
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 22px 24px; margin: 26px 0 8px;
+  }
+  .nx-inference p { font-family: var(--font-display); font-size: 21px; line-height: 1.45; margin: 0; }
+  .nx-inference .src { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .nx-meet { padding: 20px 0 6px; }
+  .nx-meet h2 { font-size: 15px; font-weight: 600; margin: 0 0 2px; }
+  .nx-meet .meta { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 12px; }
+  .nx-row { display: grid; grid-template-columns: 190px 1fr 56px; gap: 12px; align-items: center; padding: 5px 0; }
+  .nx-label { font-size: 14px; }
+  .nx-bar { height: 10px; background: #eceae4; border-radius: 5px; overflow: hidden; }
+  .nx-bar i { display: block; height: 100%; background: var(--officer); border-radius: 5px; }
+  .nx-bar i.hot { background: var(--hi); }
+  .nx-pct { font-family: var(--font-mono); font-size: 13px; text-align: right; }
+  .nx-note { font-size: 13px; color: var(--muted); padding: 16px 0 0; max-width: 760px; }
+  @media (max-width: 640px) { .nx-row { grid-template-columns: 130px 1fr 48px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">
+      <span class="dot-hi"></span><span class="dot-officer"></span>
+      infodiff-model · forecast
+    </div>
+    <h1>What happens next.</h1>
+    <p class="dek">
+      Kalshi's live odds on the next two Fed meetings, turned into one inference.
+    </p>
+  </header>
+
+  <div class="nx-inference">
+    <p>Kalshi prices an <strong>84% chance</strong> the Fed hikes at least once more in 2026. October is a coin flip — <strong>48% hike vs 50% hold</strong> — while December leans hike at <strong>66%</strong>. The most likely year-end rate: <strong>4.00–4.25%</strong>.</p>
+    <div class="src">snapshot · sep 21, 2026 ~12:47pm edt · odds via kalshi</div>
+  </div>
+
+  <div class="nx-meet">
+    <h2>October 28, 2026 — the next meeting</h2>
+    <div class="meta">KXFEDDECISION-26OCT · $2.16M volume</div>
+    <div class="nx-row"><div class="nx-label">Hold at 3.75–4.00%</div><div class="nx-bar"><i style="width:50%"></i></div><div class="nx-pct">50%</div></div>
+    <div class="nx-row"><div class="nx-label">Hike 25bp</div><div class="nx-bar"><i class="hot" style="width:48%"></i></div><div class="nx-pct">48%</div></div>
+    <div class="nx-row"><div class="nx-label">Cut / big move</div><div class="nx-bar"><i style="width:2%"></i></div><div class="nx-pct">&lt;1%</div></div>
+  </div>
+
+  <div class="nx-meet">
+    <h2>December 9, 2026 — the last meeting of the year</h2>
+    <div class="meta">KXFEDDECISION-26DEC · $631K volume</div>
+    <div class="nx-row"><div class="nx-label">Hike 25bp</div><div class="nx-bar"><i class="hot" style="width:66%"></i></div><div class="nx-pct">66%</div></div>
+    <div class="nx-row"><div class="nx-label">Hold</div><div class="nx-bar"><i style="width:31%"></i></div><div class="nx-pct">31%</div></div>
+    <div class="nx-row"><div class="nx-label">Hike more than 25bp</div><div class="nx-bar"><i style="width:3%"></i></div><div class="nx-pct">3%</div></div>
+    <div class="nx-row"><div class="nx-label">Cut</div><div class="nx-bar"><i style="width:2%"></i></div><div class="nx-pct">~1%</div></div>
+  </div>
+
+  <div class="nx-meet">
+    <h2>Where the rate ends 2026</h2>
+    <div class="meta">KXFED-26DEC · $175K volume · implied from "above X%" threshold markets</div>
+    <div class="nx-row"><div class="nx-label">3.75–4.00% (no more hikes)</div><div class="nx-bar"><i style="width:16%"></i></div><div class="nx-pct">16%</div></div>
+    <div class="nx-row"><div class="nx-label">4.00–4.25% (one more)</div><div class="nx-bar"><i class="hot" style="width:45%"></i></div><div class="nx-pct">45%</div></div>
+    <div class="nx-row"><div class="nx-label">4.25–4.50% (two more)</div><div class="nx-bar"><i class="hot" style="width:35%"></i></div><div class="nx-pct">35%</div></div>
+    <div class="nx-row"><div class="nx-label">Above 4.50%</div><div class="nx-bar"><i style="width:4%"></i></div><div class="nx-pct">~4%</div></div>
+  </div>
+
+  <p class="nx-note">
+    This lines up with the Fed's own dot plot: 16 of 19 officials saw at least one more hike in 2026.
+    Odds move — this page is a dated snapshot, not a live feed.
+    Markets: <a href="https://kalshi.com/category/financials/interest-rates">Kalshi interest rates</a>.
+  </p>
+
+  <footer>
+    <span>forecast · snapshot sep 21, 2026</span>
+    <span><a href="index.html">← the simulation</a> · <a href="timeline.html">the road to the hike</a> · <a href="evaluation.html">did the model get it right?</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
